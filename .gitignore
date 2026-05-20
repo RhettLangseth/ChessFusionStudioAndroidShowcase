@@ -1,0 +1,30 @@
+*.iml
+.gradle
+/local.properties
+/.idea/
+/.idea/caches
+/.idea/libraries
+/.idea/modules.xml
+/.idea/workspace.xml
+/.idea/navEditor.xml
+/.idea/assetWizardSettings.xml
+/.idea/misc.xml
+.DS_Store
+/build
+/captures
+.externalNativeBuild
+.cxx
+.kotlin/
+local.properties
+
+# Temporary planning/intake artifacts
+docs/ENGINE_REBUILD_PLAN.md
+reference/
+
+# Local repo-scanning scratch data
+tmp/repo-scan/
+tmp/
+
+# Module build outputs
+**/build/
+
