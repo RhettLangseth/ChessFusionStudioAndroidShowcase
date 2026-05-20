@@ -6,7 +6,7 @@ Both this showcase repo and the private `ChessFusionStudio` repo it was derived 
 A core goal of this work is to demonstrate my ability to use agentic AI effectively: define scope, direct implementation, evaluate output quality, and drive the codebase toward a coherent engineering result.
 
 This repo is intentionally narrow. It focuses on the parts that best demonstrate Android engineering judgment without exposing the full private product surface:
-- Java core domain modeling carried forward from an earlier chess codebase
+- Java core domain modeling carried forward from an earlier chess codebase I originally wrote myself, then adapted with AI/Codex during transfer into `ChessFusionStudio`
 - Kotlin/Compose Android adaptation
 - custom board and piece rendering
 - reusable UI primitives
@@ -21,7 +21,7 @@ See [NOTICE.md](NOTICE.md).
 ## What This Repo Demonstrates
 
 - clear `core` / `app` module boundaries
-- adapting an earlier Java codebase into a modern Android app
+- adapting a Java codebase I originally wrote into a modern Android app
 - practical use of agentic AI as part of a real engineering workflow
 - custom rendering work beyond stock Compose widgets
 - custom controls that are reusable outside this specific screen
@@ -42,7 +42,7 @@ The app currently exposes one focused `Theme Studio` workflow:
 ## Project Structure
 
 - `core/`
-  - Java domain slice retained from the earlier codebase
+  - Java domain slice retained from the earlier codebase I originally authored
   - selected model files
   - FEN parsing
   - curated sample positions for the public showcase
