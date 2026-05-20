@@ -2,6 +2,9 @@
 
 A curated public showcase derived from the private `ChessFusionStudio` project.
 
+Both this showcase repo and the private `ChessFusionStudio` repo it was derived from were built through iterative collaboration with OpenAI Codex / agentic AI.
+A core goal of this work is to demonstrate my ability to use agentic AI effectively: define scope, direct implementation, evaluate output quality, and drive the codebase toward a coherent engineering result.
+
 This repo is intentionally narrow. It focuses on the parts that best demonstrate Android engineering judgment without exposing the full private product surface:
 - Java core domain modeling carried forward from an earlier chess codebase
 - Kotlin/Compose Android adaptation
@@ -14,10 +17,12 @@ This repo is intentionally narrow. It focuses on the parts that best demonstrate
 This repository is public for portfolio review only.
 No license is granted for reuse, modification, or redistribution.
 See [NOTICE.md](NOTICE.md).
+
 ## What This Repo Demonstrates
 
 - clear `core` / `app` module boundaries
 - adapting an earlier Java codebase into a modern Android app
+- practical use of agentic AI as part of a real engineering workflow
 - custom rendering work beyond stock Compose widgets
 - custom controls that are reusable outside this specific screen
 - a small persisted state layer wired into a `ViewModel`
@@ -86,4 +91,3 @@ The goal of this repo is not to recreate the entire private product in public. T
 This environment can compile and test the app, but it is not set up to capture device/emulator screenshots directly. The repo already includes the `media/` structure so captures can be added cleanly without changing the layout later.
 
 See [media/README.md](media/README.md).
-
