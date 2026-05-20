@@ -9,6 +9,11 @@ This repo is intentionally narrow. It focuses on the parts that best demonstrate
 - reusable UI primitives
 - persisted settings driving a live preview workflow
 
+## Notice
+
+This repository is public for portfolio review only.
+No license is granted for reuse, modification, or redistribution.
+See [NOTICE.md](NOTICE.md).
 ## What This Repo Demonstrates
 
 - clear `core` / `app` module boundaries
@@ -81,3 +86,4 @@ The goal of this repo is not to recreate the entire private product in public. T
 This environment can compile and test the app, but it is not set up to capture device/emulator screenshots directly. The repo already includes the `media/` structure so captures can be added cleanly without changing the layout later.
 
 See [media/README.md](media/README.md).
+
