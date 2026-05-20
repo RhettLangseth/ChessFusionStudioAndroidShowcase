@@ -1,6 +1,7 @@
-# ChessFusionStudio Android Showcase
+# Chess Fusion Studio Android Showcase
 
-A curated public showcase derived from the private `ChessFusionStudio` project.
+A curated public showcase derived from the private `ChessFusionStudio` project, owned by Chess Fusion Studio LLC.
+The full Android product is being prepared for Google Play as `Chess Fusion: Analysis Studio`.
 
 Both this showcase repo and the private `ChessFusionStudio` repo it was derived from were built through iterative collaboration with OpenAI Codex / agentic AI.
 A core goal of this work is to demonstrate my ability to use agentic AI effectively: define scope, direct implementation, evaluate output quality, and drive the codebase toward a coherent engineering result.
@@ -80,14 +81,37 @@ From the repo root:
 .\gradlew :core:test :app:testDebugUnitTest
 ```
 
+## Run The Showcase
+
+From the repo root:
+
+```powershell
+.\gradlew :app:installDebug
+```
+
+Then launch the app from the emulator/device, or from `adb`:
+
+```powershell
+& "$env:LOCALAPPDATA\Android\Sdk\platform-tools\adb.exe" shell am start -n com.chessfusionstudio.showcase/.MainActivity
+```
+
 ## Why The Repo Is Curated
 
 The private `ChessFusionStudio` codebase contains broader product areas that are intentionally not exposed here, including PGN flows, engine communication, and larger app subsystems.
 
 The goal of this repo is not to recreate the entire private product in public. The goal is to show the strongest engineering slices in a way that is fast for a reviewer to understand.
 
-## Media
+## Demo
 
-This environment can compile and test the app, but it is not set up to capture device/emulator screenshots directly. The repo already includes the `media/` structure so captures can be added cleanly without changing the layout later.
+![Theme Studio demo](media/demo.gif)
 
-See [media/README.md](media/README.md).
+## Screenshots
+
+<p>
+  <img src="media/screenshots/home.png" width="250" alt="Theme Studio home screen" />
+  <img src="media/screenshots/board-theme.png" width="250" alt="Board palette dropdown expanded" />
+  <img src="media/screenshots/light-square-picker.png" width="250" alt="Light square color picker dialog" />
+  <img src="media/screenshots/piece-theme.png" width="250" alt="Piece theme controls and scale slider" />
+</p>
+
+See [media/README.md](media/README.md) for capture details.

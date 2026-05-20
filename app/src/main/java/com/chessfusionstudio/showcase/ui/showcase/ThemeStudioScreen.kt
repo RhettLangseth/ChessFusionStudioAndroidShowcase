@@ -3,6 +3,8 @@ package com.chessfusionstudio.showcase.ui.showcase
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -34,9 +36,16 @@ fun ThemeStudioScreen(viewModel: ThemeStudioViewModel = viewModel(factory = Them
     var editingSlot by remember { mutableStateOf<EditableColorSlot?>(null) }
 
     Scaffold { padding ->
-        Column(modifier = Modifier.fillMaxSize().padding(padding).padding(16.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(padding)
+                .padding(16.dp)
+                .verticalScroll(rememberScrollState()),
+            verticalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
             Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                Text(text = "ChessFusionStudio Android Showcase", style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.SemiBold)
+                Text(text = "Chess Fusion Studio Android Showcase", style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.SemiBold)
                 Text(text = "Curated public slice focused on Android adaptation, custom rendering, reusable controls, and persisted UI state.", style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
             }
             PreviewSection(previewState = uiState.previewState, selectedPosition = uiState.selectedPosition, positionOptions = uiState.positionOptions, onPositionSelected = viewModel::selectPosition)

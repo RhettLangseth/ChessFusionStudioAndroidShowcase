@@ -2,7 +2,7 @@
 
 ## Overview
 
-This repo keeps the same high-level separation as the private `ChessFusionStudio` project:
+This repo keeps the same high-level separation as the private `ChessFusionStudio` project owned by Chess Fusion Studio LLC:
 - `core`: platform-agnostic Java chess-domain slice
 - `app`: Kotlin/Compose Android showcase layer
 

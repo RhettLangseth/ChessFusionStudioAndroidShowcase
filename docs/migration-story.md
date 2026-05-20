@@ -2,7 +2,7 @@
 
 ## Context
 
-The private `ChessFusionStudio` project grew from an earlier Java chess codebase that I originally wrote myself. The engineering challenge was not just to build an Android UI, but to adapt that existing chess-domain logic into a maintainable Kotlin/Java Android application.
+The private `ChessFusionStudio` project grew from an earlier Java chess codebase that I originally wrote myself. The engineering challenge was not just to build an Android UI, but to adapt that existing chess-domain logic into a maintainable Kotlin/Java Android application owned by Chess Fusion Studio LLC and planned for release as `Chess Fusion: Analysis Studio`.
 
 This public repo preserves that story in a smaller form.
 
