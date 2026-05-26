@@ -1,78 +1,64 @@
 # Chess Fusion Studio Android Showcase
 
-A curated public showcase derived from the private `ChessFusionStudio` project, owned by Chess Fusion Studio LLC.
-The full Android product is being prepared for Google Play as `Chess Fusion: Analysis Studio`.
+A compact Android portfolio repo derived from my private `ChessFusionStudio` project.
+It highlights the parts most relevant to Android engineering review: Java domain modeling adapted into Kotlin/Compose, custom chessboard rendering, reusable UI controls, persisted UI state, and focused tests.
 
-Both this showcase repo and the private `ChessFusionStudio` repo it was derived from were built through iterative collaboration with OpenAI Codex / agentic AI.
-A core goal of this work is to demonstrate my ability to use agentic AI effectively: define scope, direct implementation, evaluate output quality, and drive the codebase toward a coherent engineering result.
+The full product remains private and is being prepared for a future Google Play release. This public repo is intentionally scoped to show engineering quality without exposing private product internals.
 
-This repo is intentionally narrow. It focuses on the parts that best demonstrate Android engineering judgment without exposing the full private product surface:
-- Java core domain modeling carried forward from an earlier chess codebase I originally wrote myself, then adapted with AI/Codex during transfer into `ChessFusionStudio`
-- Kotlin/Compose Android adaptation
-- custom board and piece rendering
-- reusable UI primitives
-- persisted settings driving a live preview workflow
+## Demo
 
-## Notice
+<p>
+  <img src="media/screenshots/home.png" width="220" alt="Theme Studio home screen" />
+  <img src="media/screenshots/board-theme.png" width="220" alt="Board palette dropdown expanded" />
+  <img src="media/screenshots/light-square-picker.png" width="220" alt="Light square color picker dialog" />
+  <img src="media/screenshots/piece-theme.png" width="220" alt="Piece theme controls and scale slider" />
+</p>
 
-This repository is public for portfolio review only.
-No license is granted for reuse, modification, or redistribution.
-See [NOTICE.md](NOTICE.md).
+## Full App Preview
 
-## What This Repo Demonstrates
+Here are a few runtime screenshots from the full Android application:
 
-- clear `core` / `app` module boundaries
-- adapting a Java codebase I originally wrote into a modern Android app
-- practical use of agentic AI as part of a real engineering workflow
-- custom rendering work beyond stock Compose widgets
-- custom controls that are reusable outside this specific screen
-- a small persisted state layer wired into a `ViewModel`
-- a deliberately curated public scope instead of a raw product dump
+<p>
+  <img src="media/actual-app/start.png" width="180" alt="Private app start screen" />
+  <img src="media/actual-app/analyze-dark.png" width="180" alt="Dark analyze screen with several moves played" />
+  <img src="media/actual-app/settings-board.png" width="180" alt="Board settings with texture, trim, and border controls" />
+</p>
 
-## Current Showcase Flow
+<p>
+  <img src="media/actual-app/engine-controls.png" width="180" alt="Engine controls dialog on the analyze screen" />
+  <img src="media/actual-app/board-marble.png" width="180" alt="Marble board and textured pieces" />
+  <img src="media/actual-app/save-game-tags.png" width="180" alt="Save game data dialog filled with classic game tags" />
+</p>
 
-The app currently exposes one focused `Theme Studio` workflow:
-- preview a sample chess position
-- switch between curated sample positions
-- adjust board palette
-- adjust piece palette
-- fine-tune colors with a custom picker
-- adjust piece scale with a custom slider
-- see changes reflected immediately in the rendered board
+## What To Review
 
-## Project Structure
+- `core` / `app` separation: Java chess-domain model kept platform-independent, Android UI kept in Kotlin/Compose.
+- Custom rendering: board geometry, square painting, piece masks, lighting, and live preview drawing.
+- UI architecture: focused `Theme Studio` screen, reusable controls, custom slider, dropdowns, and color picker.
+- State management: persisted settings mapped through a `ViewModel` and `StateFlow`.
+- Engineering workflow: original Java chess foundation written by me, then adapted and curated with directed Codex/agentic AI assistance.
 
-- `core/`
-  - Java domain slice retained from the earlier codebase I originally authored
-  - selected model files
-  - FEN parsing
-  - curated sample positions for the public showcase
-- `app/`
-  - Kotlin/Compose Android layer
-  - reduced renderer and piece painter
-  - custom slider and dropdown primitives
-  - split color picker
-  - persisted showcase settings and `ViewModel`
-- `docs/`
-  - architecture notes
-  - migration story
-  - public-scope rationale
-- `media/`
-  - placeholder location for screenshots and demo captures
+## Tech Stack
+
+- Kotlin, Java
+- Android, Jetpack Compose, Material 3
+- ViewModel, StateFlow, SharedPreferences
+- Custom Canvas drawing
+- Gradle, JUnit
 
 ## Start Here
 
-If you are reviewing code, these are the best entry points:
 - [ThemeStudioScreen.kt](app/src/main/java/com/chessfusionstudio/showcase/ui/showcase/ThemeStudioScreen.kt)
 - [ThemeStudioViewModel.kt](app/src/main/java/com/chessfusionstudio/showcase/ui/showcase/ThemeStudioViewModel.kt)
 - [ShowcaseSettingsStore.kt](app/src/main/java/com/chessfusionstudio/showcase/data/settings/ShowcaseSettingsStore.kt)
 - [ShowcaseBoardRenderer.kt](app/src/main/java/com/chessfusionstudio/showcase/boardimage/ShowcaseBoardRenderer.kt)
 - [ShowcasePieceRenderer.kt](app/src/main/java/com/chessfusionstudio/showcase/ui/components/ShowcasePieceRenderer.kt)
 - [ColorPickerDialog.kt](app/src/main/java/com/chessfusionstudio/showcase/ui/components/ColorPickerDialog.kt)
-- [AppSlider.kt](app/src/main/java/com/chessfusionstudio/showcase/ui/components/AppSlider.kt)
 - [FenCodec.java](core/src/main/java/com/chessfusionstudio/core/io/FenCodec.java)
 
-## Build And Verify
+## Verify
+
+Requires a standard Android development setup: JDK 17, Android SDK, and an emulator or physical device. Opening the repo in Android Studio will usually generate the local `local.properties` SDK path file.
 
 From the repo root:
 
@@ -81,37 +67,20 @@ From the repo root:
 .\gradlew :core:test :app:testDebugUnitTest
 ```
 
-## Run The Showcase
-
-From the repo root:
+To install the showcase on an emulator or device:
 
 ```powershell
 .\gradlew :app:installDebug
 ```
 
-Then launch the app from the emulator/device, or from `adb`:
+## Public Scope
 
-```powershell
-& "$env:LOCALAPPDATA\Android\Sdk\platform-tools\adb.exe" shell am start -n com.chessfusionstudio.showcase/.MainActivity
-```
+Included: selected domain model files, FEN parsing, curated sample positions, custom board/piece rendering, reusable Compose controls, persisted showcase settings, and unit tests.
 
-## Why The Repo Is Curated
+Excluded: private PGN flows, engine communication, native engine assets, full move-generation/rules implementation, and broader product workflows.
 
-The private `ChessFusionStudio` codebase contains broader product areas that are intentionally not exposed here, including PGN flows, engine communication, and larger app subsystems.
+For more context, see [architecture](docs/architecture.md), [public scope](docs/public-scope.md), and [migration story](docs/migration-story.md).
 
-The goal of this repo is not to recreate the entire private product in public. The goal is to show the strongest engineering slices in a way that is fast for a reviewer to understand.
+## Notice
 
-## Demo
-
-![Theme Studio demo](media/demo.gif)
-
-## Screenshots
-
-<p>
-  <img src="media/screenshots/home.png" width="250" alt="Theme Studio home screen" />
-  <img src="media/screenshots/board-theme.png" width="250" alt="Board palette dropdown expanded" />
-  <img src="media/screenshots/light-square-picker.png" width="250" alt="Light square color picker dialog" />
-  <img src="media/screenshots/piece-theme.png" width="250" alt="Piece theme controls and scale slider" />
-</p>
-
-See [media/README.md](media/README.md) for capture details.
+This repository is public for portfolio review only. No license is granted for reuse, modification, or redistribution. See [NOTICE.md](NOTICE.md).
