@@ -1,7 +1,18 @@
 # Chess Fusion Studio Android Showcase
 
-A compact Android portfolio repo derived from my private `ChessFusionStudio` project.
-It highlights the parts most relevant to Android engineering review: Java domain modeling adapted into Kotlin/Compose, custom chessboard rendering, reusable UI controls, persisted UI state, and focused tests.
+A curated public showcase derived from the private `ChessFusionStudio` project.
+
+## Agentic AI Collaboration
+
+Both this showcase repo and the private `ChessFusionStudio` repo it was derived from were built through iterative collaboration with OpenAI Codex / agentic AI.
+A core goal of this work is to demonstrate my ability to use agentic AI effectively: define scope, direct implementation, evaluate output quality, and drive the codebase toward a coherent engineering result.
+
+This repo is intentionally narrow. It focuses on the parts that best demonstrate Android engineering judgment without exposing the full private product surface:
+- Java core domain modeling carried forward from an earlier chess codebase I originally wrote myself, then adapted with AI/Codex during transfer into `ChessFusionStudio`
+- Kotlin/Compose Android adaptation
+- custom board and piece rendering
+- reusable UI primitives
+- persisted settings driving a live preview workflow
 
 The full product remains private and is being prepared for a future Google Play release. This public repo is intentionally scoped to show engineering quality without exposing private product internals.
 
