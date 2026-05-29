@@ -25,21 +25,20 @@ This repo is intentionally narrow. It focuses on the parts that best demonstrate
 
 Here are a few screenshots from the public showcase application:
 
-| Theme Studio Home | Light Square Picker |
-| --- | --- |
-| ![Theme Studio home screen](media/readme/showcase-home.png) | ![Light square color picker dialog](media/readme/showcase-light-square-picker.png) |
+![Theme Studio home screen](media/readme/showcase-home.png)
+![Light square color picker dialog](media/readme/showcase-light-square-picker.png)
 
 ## Full App Preview
 
 Here are a few runtime screenshots from the full Android application:
 
-| Start | Analyze | Board Settings |
-| --- | --- | --- |
-| ![Full app start screen](media/readme/full-app-start.png) | ![Dark analyze screen with several moves played](media/readme/full-app-analyze-dark.png) | ![Board settings with texture, trim, and border controls](media/readme/full-app-settings-board.png) |
+![Full app start screen](media/readme/full-app-start.png)
+![Dark analyze screen with several moves played](media/readme/full-app-analyze-dark.png)
+![Board settings with texture, trim, and border controls](media/readme/full-app-settings-board.png)
 
-| Engine Controls | Board Style | Save Game Tags |
-| --- | --- | --- |
-| ![Engine controls dialog on the analyze screen](media/readme/full-app-engine-controls.png) | ![Marble board and textured pieces](media/readme/full-app-board-marble.png) | ![Save game data dialog filled with classic game tags](media/readme/full-app-save-game-tags.png) |
+![Engine controls dialog on the analyze screen](media/readme/full-app-engine-controls.png)
+![Marble board and textured pieces](media/readme/full-app-board-marble.png)
+![Save game data dialog filled with classic game tags](media/readme/full-app-save-game-tags.png)
 
 ## What To Review
 
