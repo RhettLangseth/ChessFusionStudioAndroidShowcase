@@ -1,45 +1,45 @@
 # Chess Fusion Studio Android Showcase
 
-A curated public showcase derived from the private `ChessFusionStudio` project.
+**By Rhett Langseth**
+
+This is a curated public showcase derived from my private `ChessFusionStudio` project. This repo demonstrates selected engineering areas from the broader original work without exposing the entire codebase.
+
+The full Android application is a modern mobile workspace for competitive chess players to analyze and archive their games, with aesthetic board and piece customization for a polished, personalized study experience.
 
 ## Agentic AI Collaboration
 
 Both this showcase repo and the private `ChessFusionStudio` repo it was derived from were built through iterative collaboration with OpenAI Codex / agentic AI.
 A core goal of this work is to demonstrate my ability to use agentic AI effectively: define scope, direct implementation, evaluate output quality, and drive the codebase toward a coherent engineering result.
 
-This repo is intentionally narrow. It focuses on the parts that best demonstrate Android engineering judgment without exposing the full private product surface:
-- Java core domain modeling carried forward from an earlier chess codebase I originally wrote myself, then adapted with AI/Codex during transfer into `ChessFusionStudio`
-- Kotlin/Compose Android adaptation
-- custom board and piece rendering
-- reusable UI primitives
-- persisted settings driving a live preview workflow
+## Public Showcase Scope
 
-The full product remains private and is being prepared for a future Google Play release. This public repo is intentionally scoped to show engineering quality without exposing private product internals.
+This repo is intentionally narrow. It focuses on the parts that best demonstrate Android engineering judgment without exposing the full private product surface. Below are the key features included in this public version.
+- MVVM-style Kotlin/Compose architecture
+- Java chess-domain modeling
+- Custom board and piece rendering
+- Reusable Compose controls
+- Persisted live-preview settings
+- Unit tests
 
-## Demo
+## Showcase Screenshots
 
-<p>
-  <img src="media/screenshots/home.png" width="220" alt="Theme Studio home screen" />
-  <img src="media/screenshots/board-theme.png" width="220" alt="Board palette dropdown expanded" />
-  <img src="media/screenshots/light-square-picker.png" width="220" alt="Light square color picker dialog" />
-  <img src="media/screenshots/piece-theme.png" width="220" alt="Piece theme controls and scale slider" />
-</p>
+Here are a few screenshots from the public showcase application:
+
+| Theme Studio Home | Light Square Picker |
+| --- | --- |
+| ![Theme Studio home screen](media/readme/showcase-home.png) | ![Light square color picker dialog](media/readme/showcase-light-square-picker.png) |
 
 ## Full App Preview
 
 Here are a few runtime screenshots from the full Android application:
 
-<p>
-  <img src="media/actual-app/start.png" width="180" alt="Private app start screen" />
-  <img src="media/actual-app/analyze-dark.png" width="180" alt="Dark analyze screen with several moves played" />
-  <img src="media/actual-app/settings-board.png" width="180" alt="Board settings with texture, trim, and border controls" />
-</p>
+| Start | Analyze | Board Settings |
+| --- | --- | --- |
+| ![Full app start screen](media/readme/full-app-start.png) | ![Dark analyze screen with several moves played](media/readme/full-app-analyze-dark.png) | ![Board settings with texture, trim, and border controls](media/readme/full-app-settings-board.png) |
 
-<p>
-  <img src="media/actual-app/engine-controls.png" width="180" alt="Engine controls dialog on the analyze screen" />
-  <img src="media/actual-app/board-marble.png" width="180" alt="Marble board and textured pieces" />
-  <img src="media/actual-app/save-game-tags.png" width="180" alt="Save game data dialog filled with classic game tags" />
-</p>
+| Engine Controls | Board Style | Save Game Tags |
+| --- | --- | --- |
+| ![Engine controls dialog on the analyze screen](media/readme/full-app-engine-controls.png) | ![Marble board and textured pieces](media/readme/full-app-board-marble.png) | ![Save game data dialog filled with classic game tags](media/readme/full-app-save-game-tags.png) |
 
 ## What To Review
 
@@ -48,6 +48,16 @@ Here are a few runtime screenshots from the full Android application:
 - UI architecture: focused `Theme Studio` screen, reusable controls, custom slider, dropdowns, and color picker.
 - State management: persisted settings mapped through a `ViewModel` and `StateFlow`.
 - Engineering workflow: original Java chess foundation written by me, then adapted and curated with directed Codex/agentic AI assistance.
+
+## Showcase Flow
+
+The showcase exposes one focused `Theme Studio` workflow:
+- preview a sample chess position
+- switch between curated sample positions
+- adjust board and piece palettes
+- fine-tune colors with a custom picker
+- adjust piece scale with a custom slider
+- see changes immediately in the rendered board
 
 ## Tech Stack
 
@@ -65,6 +75,7 @@ Here are a few runtime screenshots from the full Android application:
 - [ShowcaseBoardRenderer.kt](app/src/main/java/com/chessfusionstudio/showcase/boardimage/ShowcaseBoardRenderer.kt)
 - [ShowcasePieceRenderer.kt](app/src/main/java/com/chessfusionstudio/showcase/ui/components/ShowcasePieceRenderer.kt)
 - [ColorPickerDialog.kt](app/src/main/java/com/chessfusionstudio/showcase/ui/components/ColorPickerDialog.kt)
+- [AppSlider.kt](app/src/main/java/com/chessfusionstudio/showcase/ui/components/AppSlider.kt)
 - [FenCodec.java](core/src/main/java/com/chessfusionstudio/core/io/FenCodec.java)
 
 ## Verify
@@ -83,14 +94,6 @@ To install the showcase on an emulator or device:
 ```powershell
 .\gradlew :app:installDebug
 ```
-
-## Public Scope
-
-Included: selected domain model files, FEN parsing, curated sample positions, custom board/piece rendering, reusable Compose controls, persisted showcase settings, and unit tests.
-
-Excluded: private PGN flows, engine communication, native engine assets, full move-generation/rules implementation, and broader product workflows.
-
-For more context, see [architecture](docs/architecture.md), [public scope](docs/public-scope.md), and [migration story](docs/migration-story.md).
 
 ## Notice
 
