@@ -1,5 +1,6 @@
 package com.chessfusionstudio.showcase.boardimage
 
+import android.graphics.Typeface
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Rect
@@ -10,7 +11,9 @@ import com.chessfusionstudio.core.model.Square
 import com.chessfusionstudio.showcase.ui.components.ShowcasePieceRenderer
 
 internal object ShowcaseBoardRenderer {
-    fun DrawScope.draw(previewState: ShowcaseBoardPreviewState) {
+    fun isLightSquare(file: Int, rank: Int): Boolean = (file + rank) % 2 != 0
+
+    fun DrawScope.draw(previewState: ShowcaseBoardPreviewState, pieceTypeface: Typeface) {
         val metrics = ShowcaseBoardGeometry.resolve(size, previewState.boardStyle)
         val outerRect = Rect(
             left = metrics.boardRect.left - metrics.borderWidth,
@@ -39,7 +42,7 @@ internal object ShowcaseBoardRenderer {
         for (rank in 0 until 8) {
             for (file in 0 until 8) {
                 val squareRect = metrics.squareRect(file, rank)
-                val squareColor = if ((file + rank) % 2 == 0) previewState.boardStyle.lightSquareColor else previewState.boardStyle.darkSquareColor
+                val squareColor = if (isLightSquare(file, rank)) previewState.boardStyle.lightSquareColor else previewState.boardStyle.darkSquareColor
                 drawRect(color = squareColor, topLeft = squareRect.topLeft, size = squareRect.size)
             }
         }
@@ -49,7 +52,7 @@ internal object ShowcaseBoardRenderer {
             val squareRect = metrics.squareRect(square.file(), square.rank())
             val inset = metrics.squareSize * (1f - previewState.pieceStyle.scale) / 2f
             val pieceRect = Rect(squareRect.left + inset, squareRect.top + inset, squareRect.right - inset, squareRect.bottom - inset)
-            with(ShowcasePieceRenderer) { drawPiece(piece, pieceRect, previewState.pieceStyle) }
+            with(ShowcasePieceRenderer) { drawPiece(piece, pieceRect, previewState.pieceStyle, pieceTypeface) }
         }
         drawRoundRect(
             color = Color.Black.copy(alpha = 0.10f),

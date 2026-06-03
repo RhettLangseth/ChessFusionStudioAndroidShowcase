@@ -17,12 +17,12 @@ internal fun PieceThemeSection(
     selectedPalette: PalettePairOption,
     options: List<PalettePairOption>,
     pieceScale: Float,
-    whitePieceColor: Color,
-    blackPieceColor: Color,
+    pieceBackgroundColor: Color,
+    pieceForegroundColor: Color,
     onPaletteSelected: (PalettePairOption) -> Unit,
     onPieceScaleChanged: (Float) -> Unit,
-    onWhitePiecePressed: () -> Unit,
-    onBlackPiecePressed: () -> Unit,
+    onPieceBackgroundPressed: () -> Unit,
+    onPieceForegroundPressed: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     ThemeStudioSection(title = "Piece Theme", modifier = modifier) {
@@ -31,8 +31,8 @@ internal fun PieceThemeSection(
         Text(text = "Piece scale", style = MaterialTheme.typography.labelLarge)
         AppSlider(value = pieceScale, onValueChange = onPieceScaleChanged, valueRange = 0.45f..0.95f, modifier = Modifier.fillMaxWidth(), valueLabel = { value -> "${(value * 100f).toInt()}%" })
         Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-            ColorSwatchButton(label = "White pieces", color = whitePieceColor, onClick = onWhitePiecePressed)
-            ColorSwatchButton(label = "Black pieces", color = blackPieceColor, onClick = onBlackPiecePressed)
+            ColorSwatchButton(label = "Background", color = pieceBackgroundColor, onClick = onPieceBackgroundPressed)
+            ColorSwatchButton(label = "Foreground", color = pieceForegroundColor, onClick = onPieceForegroundPressed)
         }
     }
 }

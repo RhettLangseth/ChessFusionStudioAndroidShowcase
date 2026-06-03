@@ -7,8 +7,8 @@ class PieceStyleNormalizerTest {
     @Test
     fun normalizePieceStyle_acceptsKnownValues() {
         assertEquals(
-            PIECE_STYLE_OPEN_CHESS_FONT,
-            normalizePieceStyle(" $PIECE_STYLE_OPEN_CHESS_FONT ")
+            PIECE_STYLE_CHESS_CANCUN,
+            normalizePieceStyle(" $PIECE_STYLE_CHESS_CANCUN ")
         )
     }
 

@@ -12,8 +12,8 @@ private const val KEY_BOARD_PALETTE_ID = "board_palette_id"
 private const val KEY_PIECE_PALETTE_ID = "piece_palette_id"
 private const val KEY_LIGHT_SQUARE = "light_square"
 private const val KEY_DARK_SQUARE = "dark_square"
-private const val KEY_WHITE_PIECE = "white_piece"
-private const val KEY_BLACK_PIECE = "black_piece"
+private const val KEY_PIECE_BACKGROUND = "piece_background"
+private const val KEY_PIECE_FOREGROUND = "piece_foreground"
 private const val KEY_PIECE_SCALE = "piece_scale"
 
 const val POSITION_CLASSIC = "classic"
@@ -30,8 +30,8 @@ const val PIECE_PALETTE_CUSTOM = "custom"
 
 private const val DEFAULT_LIGHT_SQUARE = 0xFFF0D9B5.toInt()
 private const val DEFAULT_DARK_SQUARE = 0xFFB58863.toInt()
-private const val DEFAULT_WHITE_PIECE = 0xFFF8F4E7.toInt()
-private const val DEFAULT_BLACK_PIECE = 0xFF2A3138.toInt()
+private const val DEFAULT_PIECE_BACKGROUND = 0xFFF8F4E7.toInt()
+private const val DEFAULT_PIECE_FOREGROUND = 0xFF2A3138.toInt()
 private const val DEFAULT_PIECE_SCALE = 0.72f
 
 data class ShowcaseSettingsSnapshot(
@@ -40,8 +40,8 @@ data class ShowcaseSettingsSnapshot(
     val piecePaletteId: String = PIECE_PALETTE_IVORY,
     val lightSquareArgb: Int = DEFAULT_LIGHT_SQUARE,
     val darkSquareArgb: Int = DEFAULT_DARK_SQUARE,
-    val whitePieceArgb: Int = DEFAULT_WHITE_PIECE,
-    val blackPieceArgb: Int = DEFAULT_BLACK_PIECE,
+    val pieceBackgroundArgb: Int = DEFAULT_PIECE_BACKGROUND,
+    val pieceForegroundArgb: Int = DEFAULT_PIECE_FOREGROUND,
     val pieceScale: Float = DEFAULT_PIECE_SCALE
 )
 
@@ -52,11 +52,11 @@ class ShowcaseSettingsStore(context: Context) {
 
     fun setPositionId(value: String) = update { it.copy(positionId = value) }
     fun applyBoardPalette(paletteId: String, lightSquareArgb: Int, darkSquareArgb: Int) = update { it.copy(boardPaletteId = paletteId, lightSquareArgb = lightSquareArgb, darkSquareArgb = darkSquareArgb) }
-    fun applyPiecePalette(paletteId: String, whitePieceArgb: Int, blackPieceArgb: Int) = update { it.copy(piecePaletteId = paletteId, whitePieceArgb = whitePieceArgb, blackPieceArgb = blackPieceArgb) }
+    fun applyPiecePalette(paletteId: String, pieceBackgroundArgb: Int, pieceForegroundArgb: Int) = update { it.copy(piecePaletteId = paletteId, pieceBackgroundArgb = pieceBackgroundArgb, pieceForegroundArgb = pieceForegroundArgb) }
     fun setLightSquareArgb(value: Int) = update { it.copy(boardPaletteId = BOARD_PALETTE_CUSTOM, lightSquareArgb = normalizeOpaqueColorArgb(value)) }
     fun setDarkSquareArgb(value: Int) = update { it.copy(boardPaletteId = BOARD_PALETTE_CUSTOM, darkSquareArgb = normalizeOpaqueColorArgb(value)) }
-    fun setWhitePieceArgb(value: Int) = update { it.copy(piecePaletteId = PIECE_PALETTE_CUSTOM, whitePieceArgb = normalizeOpaqueColorArgb(value)) }
-    fun setBlackPieceArgb(value: Int) = update { it.copy(piecePaletteId = PIECE_PALETTE_CUSTOM, blackPieceArgb = normalizeOpaqueColorArgb(value)) }
+    fun setPieceBackgroundArgb(value: Int) = update { it.copy(piecePaletteId = PIECE_PALETTE_CUSTOM, pieceBackgroundArgb = normalizeOpaqueColorArgb(value)) }
+    fun setPieceForegroundArgb(value: Int) = update { it.copy(piecePaletteId = PIECE_PALETTE_CUSTOM, pieceForegroundArgb = normalizeOpaqueColorArgb(value)) }
     fun setPieceScale(value: Float) = update { it.copy(pieceScale = value.coerceIn(0.45f, 0.95f)) }
 
     private fun update(transform: (ShowcaseSettingsSnapshot) -> ShowcaseSettingsSnapshot) {
@@ -68,8 +68,8 @@ class ShowcaseSettingsStore(context: Context) {
             .putString(KEY_PIECE_PALETTE_ID, updated.piecePaletteId)
             .putInt(KEY_LIGHT_SQUARE, updated.lightSquareArgb)
             .putInt(KEY_DARK_SQUARE, updated.darkSquareArgb)
-            .putInt(KEY_WHITE_PIECE, updated.whitePieceArgb)
-            .putInt(KEY_BLACK_PIECE, updated.blackPieceArgb)
+            .putInt(KEY_PIECE_BACKGROUND, updated.pieceBackgroundArgb)
+            .putInt(KEY_PIECE_FOREGROUND, updated.pieceForegroundArgb)
             .putFloat(KEY_PIECE_SCALE, updated.pieceScale)
             .apply()
     }
@@ -81,8 +81,8 @@ class ShowcaseSettingsStore(context: Context) {
             piecePaletteId = prefs.getString(KEY_PIECE_PALETTE_ID, PIECE_PALETTE_IVORY) ?: PIECE_PALETTE_IVORY,
             lightSquareArgb = normalizeOpaqueColorArgb(prefs.getInt(KEY_LIGHT_SQUARE, DEFAULT_LIGHT_SQUARE)),
             darkSquareArgb = normalizeOpaqueColorArgb(prefs.getInt(KEY_DARK_SQUARE, DEFAULT_DARK_SQUARE)),
-            whitePieceArgb = normalizeOpaqueColorArgb(prefs.getInt(KEY_WHITE_PIECE, DEFAULT_WHITE_PIECE)),
-            blackPieceArgb = normalizeOpaqueColorArgb(prefs.getInt(KEY_BLACK_PIECE, DEFAULT_BLACK_PIECE)),
+            pieceBackgroundArgb = normalizeOpaqueColorArgb(prefs.getInt(KEY_PIECE_BACKGROUND, DEFAULT_PIECE_BACKGROUND)),
+            pieceForegroundArgb = normalizeOpaqueColorArgb(prefs.getInt(KEY_PIECE_FOREGROUND, DEFAULT_PIECE_FOREGROUND)),
             pieceScale = prefs.getFloat(KEY_PIECE_SCALE, DEFAULT_PIECE_SCALE).coerceIn(0.45f, 0.95f)
         )
     }

@@ -40,34 +40,11 @@ Here are a few runtime screenshots from the full Android application:
 ![Marble board and textured pieces](media/readme/full-app-board-marble.png)
 ![Save game data dialog filled with classic game tags](media/readme/full-app-save-game-tags.png)
 
-## What To Review
+## Reviewer Guide
 
-- `core` / `app` separation: Java chess-domain model kept platform-independent, Android UI kept in Kotlin/Compose.
-- Custom rendering: board geometry, square painting, piece masks, lighting, and live preview drawing.
-- UI architecture: focused `Theme Studio` screen, reusable controls, custom slider, dropdowns, and color picker.
-- State management: persisted settings mapped through a `ViewModel` and `StateFlow`.
-- Engineering workflow: original Java chess foundation written by me, then adapted and curated with directed Codex/agentic AI assistance.
+This showcase is organized around one focused `Theme Studio` workflow. It demonstrates MVVM-style Compose architecture, Java chess-domain modeling, custom board and piece rendering, reusable controls, and persisted live-preview settings.
 
-## Showcase Flow
-
-The showcase exposes one focused `Theme Studio` workflow:
-- preview a sample chess position
-- switch between curated sample positions
-- adjust board and piece palettes
-- fine-tune colors with a custom picker
-- adjust piece scale with a custom slider
-- see changes immediately in the rendered board
-
-## Tech Stack
-
-- Kotlin, Java
-- Android, Jetpack Compose, Material 3
-- ViewModel, StateFlow, SharedPreferences
-- Custom Canvas drawing
-- Gradle, JUnit
-
-## Start Here
-
+Recommended files to review:
 - [ThemeStudioScreen.kt](app/src/main/java/com/chessfusionstudio/showcase/ui/showcase/ThemeStudioScreen.kt)
 - [ThemeStudioViewModel.kt](app/src/main/java/com/chessfusionstudio/showcase/ui/showcase/ThemeStudioViewModel.kt)
 - [ShowcaseSettingsStore.kt](app/src/main/java/com/chessfusionstudio/showcase/data/settings/ShowcaseSettingsStore.kt)
@@ -77,7 +54,14 @@ The showcase exposes one focused `Theme Studio` workflow:
 - [AppSlider.kt](app/src/main/java/com/chessfusionstudio/showcase/ui/components/AppSlider.kt)
 - [FenCodec.java](core/src/main/java/com/chessfusionstudio/core/io/FenCodec.java)
 
-## Verify
+What to try in the app:
+- switch between sample chess positions
+- adjust board and piece palettes
+- fine-tune colors with the custom picker
+- adjust piece scale with the custom slider
+- confirm settings persist after restarting the app
+
+## Build, Test, and Run
 
 Requires a standard Android development setup: JDK 17, Android SDK, and an emulator or physical device. Opening the repo in Android Studio will usually generate the local `local.properties` SDK path file.
 
@@ -94,6 +78,14 @@ To install the showcase on an emulator or device:
 .\gradlew :app:installDebug
 ```
 
+## Tech Stack
+
+- Kotlin, Java
+- Android, Jetpack Compose, Material 3
+- ViewModel, StateFlow, SharedPreferences
+- Custom Canvas drawing
+- Gradle, JUnit
+
 ## Notice
 
-This repository is public for portfolio review only. No license is granted for reuse, modification, or redistribution. See [NOTICE.md](NOTICE.md).
+This repository is public for portfolio review only. No license is granted for reuse, modification, or redistribution of the original showcase code or original assets. Third-party ChessCancun assets are governed by their own provenance and license details. See [NOTICE.md](NOTICE.md).

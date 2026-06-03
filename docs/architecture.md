@@ -70,10 +70,11 @@ The rendering path is intentionally reduced relative to the private repo.
 ### Pieces
 
 `ShowcasePieceRenderer` uses:
-- `ShowcasePieceMask` for reduced shape construction
-- `ShowcasePieceLighting` for gradient, outline, accent, and highlight colors
+- `ShowcasePieceGlyphs` for ChessCancun piece-character mapping
+- aligned glyph paths generated from `ChessCancun.ttf`
+- `ShowcasePieceMaskRasterizer` to fill interior piece backgrounds
 
-This keeps the rendering visually differentiated while avoiding the broader private rendering pipeline.
+This keeps the showcase close to the full app's font-based rendering approach while omitting the broader private rendering pipeline for textures, lighting, caching, and font-specific production fixes.
 
 ## UI Primitive Reuse
 

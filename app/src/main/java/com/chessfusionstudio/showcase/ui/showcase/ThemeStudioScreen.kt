@@ -26,8 +26,8 @@ import com.chessfusionstudio.showcase.ui.components.ColorPickerDialog
 enum class EditableColorSlot(val title: String) {
     LightSquare("Light Square Color"),
     DarkSquare("Dark Square Color"),
-    WhitePiece("White Piece Color"),
-    BlackPiece("Black Piece Color")
+    PieceBackground("Piece Background Color"),
+    PieceForeground("Piece Foreground Color")
 }
 
 @Composable
@@ -50,7 +50,8 @@ fun ThemeStudioScreen(viewModel: ThemeStudioViewModel = viewModel(factory = Them
             }
             PreviewSection(previewState = uiState.previewState, selectedPosition = uiState.selectedPosition, positionOptions = uiState.positionOptions, onPositionSelected = viewModel::selectPosition)
             BoardThemeSection(selectedPalette = uiState.selectedBoardPalette, options = uiState.boardPaletteOptions, lightSquareColor = uiState.lightSquareColor, darkSquareColor = uiState.darkSquareColor, onPaletteSelected = viewModel::applyBoardPalette, onLightSquarePressed = { editingSlot = EditableColorSlot.LightSquare }, onDarkSquarePressed = { editingSlot = EditableColorSlot.DarkSquare })
-            PieceThemeSection(selectedPalette = uiState.selectedPiecePalette, options = uiState.piecePaletteOptions, pieceScale = uiState.pieceScale, whitePieceColor = uiState.whitePieceColor, blackPieceColor = uiState.blackPieceColor, onPaletteSelected = viewModel::applyPiecePalette, onPieceScaleChanged = viewModel::updatePieceScale, onWhitePiecePressed = { editingSlot = EditableColorSlot.WhitePiece }, onBlackPiecePressed = { editingSlot = EditableColorSlot.BlackPiece })
+            PieceThemeSection(selectedPalette = uiState.selectedPiecePalette, options = uiState.piecePaletteOptions, pieceScale = uiState.pieceScale, pieceBackgroundColor = uiState.pieceBackgroundColor, pieceForegroundColor = uiState.pieceForegroundColor, onPaletteSelected = viewModel::applyPiecePalette, onPieceScaleChanged = viewModel::updatePieceScale, onPieceBackgroundPressed = { editingSlot = EditableColorSlot.PieceBackground }, onPieceForegroundPressed = { editingSlot = EditableColorSlot.PieceForeground })
+            ChessCancunNoticeSection()
         }
     }
 
@@ -59,8 +60,8 @@ fun ThemeStudioScreen(viewModel: ThemeStudioViewModel = viewModel(factory = Them
         val initialColor = when (activeSlot) {
             EditableColorSlot.LightSquare -> uiState.lightSquareColor.toArgb()
             EditableColorSlot.DarkSquare -> uiState.darkSquareColor.toArgb()
-            EditableColorSlot.WhitePiece -> uiState.whitePieceColor.toArgb()
-            EditableColorSlot.BlackPiece -> uiState.blackPieceColor.toArgb()
+            EditableColorSlot.PieceBackground -> uiState.pieceBackgroundColor.toArgb()
+            EditableColorSlot.PieceForeground -> uiState.pieceForegroundColor.toArgb()
         }
         ColorPickerDialog(
             title = activeSlot.title,
@@ -70,8 +71,8 @@ fun ThemeStudioScreen(viewModel: ThemeStudioViewModel = viewModel(factory = Them
                 when (activeSlot) {
                     EditableColorSlot.LightSquare -> viewModel.updateLightSquareColor(colorArgb)
                     EditableColorSlot.DarkSquare -> viewModel.updateDarkSquareColor(colorArgb)
-                    EditableColorSlot.WhitePiece -> viewModel.updateWhitePieceColor(colorArgb)
-                    EditableColorSlot.BlackPiece -> viewModel.updateBlackPieceColor(colorArgb)
+                    EditableColorSlot.PieceBackground -> viewModel.updatePieceBackgroundColor(colorArgb)
+                    EditableColorSlot.PieceForeground -> viewModel.updatePieceForegroundColor(colorArgb)
                 }
                 editingSlot = null
             }

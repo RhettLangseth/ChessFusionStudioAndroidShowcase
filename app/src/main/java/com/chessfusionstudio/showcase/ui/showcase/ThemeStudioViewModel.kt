@@ -33,8 +33,8 @@ data class ThemeStudioUiState(
     val pieceScale: Float,
     val lightSquareColor: Color,
     val darkSquareColor: Color,
-    val whitePieceColor: Color,
-    val blackPieceColor: Color
+    val pieceBackgroundColor: Color,
+    val pieceForegroundColor: Color
 )
 
 private val positionOptions = listOf(
@@ -63,8 +63,8 @@ class ThemeStudioViewModel(private val settingsStore: ShowcaseSettingsStore) : V
     fun applyPiecePalette(option: PalettePairOption) { if (option.id != PIECE_PALETTE_CUSTOM) settingsStore.applyPiecePalette(option.id, option.firstColorArgb, option.secondColorArgb) }
     fun updateLightSquareColor(argb: Int) = settingsStore.setLightSquareArgb(argb)
     fun updateDarkSquareColor(argb: Int) = settingsStore.setDarkSquareArgb(argb)
-    fun updateWhitePieceColor(argb: Int) = settingsStore.setWhitePieceArgb(argb)
-    fun updateBlackPieceColor(argb: Int) = settingsStore.setBlackPieceArgb(argb)
+    fun updatePieceBackgroundColor(argb: Int) = settingsStore.setPieceBackgroundArgb(argb)
+    fun updatePieceForegroundColor(argb: Int) = settingsStore.setPieceForegroundArgb(argb)
     fun updatePieceScale(value: Float) = settingsStore.setPieceScale(value)
 
     private fun toUiState(snapshot: ShowcaseSettingsSnapshot): ThemeStudioUiState {
@@ -72,7 +72,7 @@ class ThemeStudioViewModel(private val settingsStore: ShowcaseSettingsStore) : V
         val selectedBoardPalette = boardPaletteOptions.firstOrNull { it.id == snapshot.boardPaletteId } ?: boardPaletteOptions.first()
         val selectedPiecePalette = piecePaletteOptions.firstOrNull { it.id == snapshot.piecePaletteId } ?: piecePaletteOptions.first()
         return ThemeStudioUiState(
-            previewState = ShowcaseBoardPreviewState(selectedPosition.gameState, ShowcaseBoardStyle(Color(snapshot.lightSquareArgb), Color(snapshot.darkSquareArgb)), ShowcasePieceStyle(Color(snapshot.whitePieceArgb), Color(snapshot.blackPieceArgb), snapshot.pieceScale)),
+            previewState = ShowcaseBoardPreviewState(selectedPosition.gameState, ShowcaseBoardStyle(Color(snapshot.lightSquareArgb), Color(snapshot.darkSquareArgb)), ShowcasePieceStyle(Color(snapshot.pieceBackgroundArgb), Color(snapshot.pieceForegroundArgb), snapshot.pieceScale)),
             positionOptions = positionOptions,
             selectedPosition = selectedPosition,
             boardPaletteOptions = boardPaletteOptions,
@@ -82,8 +82,8 @@ class ThemeStudioViewModel(private val settingsStore: ShowcaseSettingsStore) : V
             pieceScale = snapshot.pieceScale,
             lightSquareColor = Color(snapshot.lightSquareArgb),
             darkSquareColor = Color(snapshot.darkSquareArgb),
-            whitePieceColor = Color(snapshot.whitePieceArgb),
-            blackPieceColor = Color(snapshot.blackPieceArgb)
+            pieceBackgroundColor = Color(snapshot.pieceBackgroundArgb),
+            pieceForegroundColor = Color(snapshot.pieceForegroundArgb)
         )
     }
 
