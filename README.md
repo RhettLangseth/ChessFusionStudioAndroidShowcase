@@ -28,7 +28,7 @@ Here are a few screenshots from the public showcase application:
 ![Theme Studio home screen](media/readme/showcase-home.png)
 ![Light square color picker dialog](media/readme/showcase-light-square-picker.png)
 
-## Full App Preview
+## Full Application Screenshots
 
 Here are a few runtime screenshots from the full Android application:
 
@@ -42,10 +42,10 @@ Here are a few runtime screenshots from the full Android application:
 
 ## Reviewer Guide
 
-This showcase is organized around one focused `Theme Studio` workflow. It demonstrates MVVM-style Compose architecture, Java chess-domain modeling, custom board and piece rendering, reusable controls, and persisted live-preview settings.
+This showcase is organized around a focused board-preview and settings workflow. It demonstrates MVVM-style Compose architecture, Java chess-domain modeling, custom board and piece rendering, reusable controls, and persisted live-preview settings.
 
 Recommended files to review:
-- [ThemeStudioScreen.kt](app/src/main/java/com/chessfusionstudio/showcase/ui/showcase/ThemeStudioScreen.kt)
+- [ShowcaseSettingsScreen.kt](app/src/main/java/com/chessfusionstudio/showcase/ui/settings/ShowcaseSettingsScreen.kt)
 - [ThemeStudioViewModel.kt](app/src/main/java/com/chessfusionstudio/showcase/ui/showcase/ThemeStudioViewModel.kt)
 - [ShowcaseSettingsStore.kt](app/src/main/java/com/chessfusionstudio/showcase/data/settings/ShowcaseSettingsStore.kt)
 - [ShowcaseBoardRenderer.kt](app/src/main/java/com/chessfusionstudio/showcase/boardimage/ShowcaseBoardRenderer.kt)

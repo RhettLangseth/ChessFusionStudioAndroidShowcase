@@ -9,15 +9,13 @@ public final class ShowcaseBoardFactory {
     private ShowcaseBoardFactory() {
     }
 
-    public static GameState classicStart() {
-        return FenCodec.parse(ShowcasePositions.CLASSIC_START);
-    }
-
     public static List<GameState> samples() {
         return Arrays.asList(
-                FenCodec.parse(ShowcasePositions.CLASSIC_START),
-                FenCodec.parse(ShowcasePositions.SICILIAN_STRUCTURE),
-                FenCodec.parse(ShowcasePositions.ENDGAME_STUDY)
+                FenCodec.parse(ShowcasePositions.START_POSITION),
+                FenCodec.parse(ShowcasePositions.PHILIDOR_DEFENSE),
+                FenCodec.parse(ShowcasePositions.RUY_LOPEZ),
+                FenCodec.parse(ShowcasePositions.QUEENS_GAMBIT),
+                FenCodec.parse(ShowcasePositions.SCANDINAVIAN_DEFENSE)
         );
     }
 }

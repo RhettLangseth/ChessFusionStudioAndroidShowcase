@@ -3,7 +3,7 @@ package com.chessfusionstudio.showcase
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import com.chessfusionstudio.showcase.ui.showcase.ThemeStudioScreen
+import com.chessfusionstudio.showcase.ui.navigation.ShowcaseNavHost
 import com.chessfusionstudio.showcase.ui.theme.ShowcaseTheme
 
 class MainActivity : ComponentActivity() {
@@ -11,7 +11,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             ShowcaseTheme {
-                ThemeStudioScreen()
+                ShowcaseNavHost(onExit = ::finishAndRemoveTask)
             }
         }
     }

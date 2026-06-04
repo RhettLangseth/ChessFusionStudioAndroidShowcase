@@ -38,21 +38,22 @@ data class ThemeStudioUiState(
 )
 
 private val positionOptions = listOf(
-    PositionOption(POSITION_CLASSIC, "Classic Start", sampleStates[0]),
-    PositionOption(POSITION_SICILIAN, "Sicilian Structure", sampleStates[1]),
-    PositionOption(POSITION_ENDGAME, "Endgame Study", sampleStates[2])
+    PositionOption(POSITION_START, "Start Position", sampleStates[0]),
+    PositionOption(POSITION_PHILIDOR, "Philidor Defense", sampleStates[1]),
+    PositionOption(POSITION_RUY_LOPEZ, "Ruy Lopez", sampleStates[2]),
+    PositionOption(POSITION_QUEENS_GAMBIT, "Queen's Gambit", sampleStates[3]),
+    PositionOption(POSITION_SCANDINAVIAN, "Scandinavian Defense", sampleStates[4])
 )
-private val boardPaletteOptions = listOf(
+private val standardBoardPaletteOptions = listOf(
     PalettePairOption(BOARD_PALETTE_WALNUT, "Walnut", 0xFFF0D9B5.toInt(), 0xFFB58863.toInt()),
     PalettePairOption(BOARD_PALETTE_SLATE, "Slate", 0xFFDCE3EA.toInt(), 0xFF6C7A89.toInt()),
-    PalettePairOption(BOARD_PALETTE_LEAF, "Leaf", 0xFFDDE9D5.toInt(), 0xFF739267.toInt()),
-    PalettePairOption(BOARD_PALETTE_CUSTOM, "Custom", 0xFFF0D9B5.toInt(), 0xFFB58863.toInt())
+    PalettePairOption(BOARD_PALETTE_LEAF, "Leaf", 0xFFDDE9D5.toInt(), 0xFF739267.toInt())
 )
+private val customBoardPalette = PalettePairOption(BOARD_PALETTE_CUSTOM, "Custom", 0xFFF0D9B5.toInt(), 0xFFB58863.toInt())
 private val piecePaletteOptions = listOf(
-    PalettePairOption(PIECE_PALETTE_IVORY, "Ivory & Ebony", 0xFFF8F4E7.toInt(), 0xFF2A3138.toInt()),
-    PalettePairOption(PIECE_PALETTE_ROSE, "Rose & Charcoal", 0xFFF4D8DA.toInt(), 0xFF3A2F35.toInt()),
-    PalettePairOption(PIECE_PALETTE_MINT, "Mint & Graphite", 0xFFD8F0E4.toInt(), 0xFF24323A.toInt()),
-    PalettePairOption(PIECE_PALETTE_CUSTOM, "Custom", 0xFFF8F4E7.toInt(), 0xFF2A3138.toInt())
+    PalettePairOption(PIECE_PALETTE_IVORY, "Black & White", 0xFFF8F4E7.toInt(), 0xFF2A3138.toInt()),
+    PalettePairOption(PIECE_PALETTE_ROSE, "Rose", 0xFFF4D8DA.toInt(), 0xFF3A2F35.toInt()),
+    PalettePairOption(PIECE_PALETTE_MINT, "Mint", 0xFFD8F0E4.toInt(), 0xFF24323A.toInt())
 )
 
 class ThemeStudioViewModel(private val settingsStore: ShowcaseSettingsStore) : ViewModel() {
@@ -60,16 +61,22 @@ class ThemeStudioViewModel(private val settingsStore: ShowcaseSettingsStore) : V
 
     fun selectPosition(option: PositionOption) = settingsStore.setPositionId(option.id)
     fun applyBoardPalette(option: PalettePairOption) { if (option.id != BOARD_PALETTE_CUSTOM) settingsStore.applyBoardPalette(option.id, option.firstColorArgb, option.secondColorArgb) }
-    fun applyPiecePalette(option: PalettePairOption) { if (option.id != PIECE_PALETTE_CUSTOM) settingsStore.applyPiecePalette(option.id, option.firstColorArgb, option.secondColorArgb) }
+    fun applyPiecePalette(option: PalettePairOption) = settingsStore.applyPiecePalette(option.id, option.firstColorArgb, option.secondColorArgb)
     fun updateLightSquareColor(argb: Int) = settingsStore.setLightSquareArgb(argb)
     fun updateDarkSquareColor(argb: Int) = settingsStore.setDarkSquareArgb(argb)
-    fun updatePieceBackgroundColor(argb: Int) = settingsStore.setPieceBackgroundArgb(argb)
-    fun updatePieceForegroundColor(argb: Int) = settingsStore.setPieceForegroundArgb(argb)
     fun updatePieceScale(value: Float) = settingsStore.setPieceScale(value)
 
     private fun toUiState(snapshot: ShowcaseSettingsSnapshot): ThemeStudioUiState {
         val selectedPosition = positionOptions.firstOrNull { it.id == snapshot.positionId } ?: positionOptions.first()
-        val selectedBoardPalette = boardPaletteOptions.firstOrNull { it.id == snapshot.boardPaletteId } ?: boardPaletteOptions.first()
+        val matchedBoardPalette = standardBoardPaletteOptions.firstOrNull {
+            it.firstColorArgb == snapshot.lightSquareArgb && it.secondColorArgb == snapshot.darkSquareArgb
+        }
+        val selectedBoardPalette = matchedBoardPalette ?: customBoardPalette
+        val boardPaletteOptions = if (matchedBoardPalette == null) {
+            listOf(customBoardPalette) + standardBoardPaletteOptions
+        } else {
+            standardBoardPaletteOptions
+        }
         val selectedPiecePalette = piecePaletteOptions.firstOrNull { it.id == snapshot.piecePaletteId } ?: piecePaletteOptions.first()
         return ThemeStudioUiState(
             previewState = ShowcaseBoardPreviewState(selectedPosition.gameState, ShowcaseBoardStyle(Color(snapshot.lightSquareArgb), Color(snapshot.darkSquareArgb)), ShowcasePieceStyle(Color(snapshot.pieceBackgroundArgb), Color(snapshot.pieceForegroundArgb), snapshot.pieceScale)),

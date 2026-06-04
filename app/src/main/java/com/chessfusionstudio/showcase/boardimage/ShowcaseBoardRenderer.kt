@@ -2,11 +2,8 @@ package com.chessfusionstudio.showcase.boardimage
 
 import android.graphics.Typeface
 import androidx.compose.ui.geometry.CornerRadius
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Rect
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.DrawScope
-import androidx.compose.ui.graphics.drawscope.Stroke
 import com.chessfusionstudio.core.model.Square
 import com.chessfusionstudio.showcase.ui.components.ShowcasePieceRenderer
 
@@ -20,12 +17,6 @@ internal object ShowcaseBoardRenderer {
             top = metrics.boardRect.top - metrics.borderWidth,
             right = metrics.boardRect.right + metrics.borderWidth,
             bottom = metrics.boardRect.bottom + metrics.borderWidth
-        )
-        drawRoundRect(
-            color = previewState.boardStyle.shadowColor,
-            topLeft = Offset(outerRect.left, outerRect.top + metrics.borderWidth * 0.45f),
-            size = outerRect.size,
-            cornerRadius = CornerRadius(metrics.cornerRadius, metrics.cornerRadius)
         )
         drawRoundRect(
             color = previewState.boardStyle.borderColor,
@@ -54,12 +45,5 @@ internal object ShowcaseBoardRenderer {
             val pieceRect = Rect(squareRect.left + inset, squareRect.top + inset, squareRect.right - inset, squareRect.bottom - inset)
             with(ShowcasePieceRenderer) { drawPiece(piece, pieceRect, previewState.pieceStyle, pieceTypeface) }
         }
-        drawRoundRect(
-            color = Color.Black.copy(alpha = 0.10f),
-            topLeft = metrics.boardRect.topLeft,
-            size = metrics.boardRect.size,
-            cornerRadius = CornerRadius(metrics.cornerRadius * 0.72f, metrics.cornerRadius * 0.72f),
-            style = Stroke(width = metrics.squareSize * 0.04f)
-        )
     }
 }
