@@ -32,7 +32,7 @@ internal object ShowcaseBoardRenderer {
         )
         for (rank in 0 until 8) {
             for (file in 0 until 8) {
-                val squareRect = metrics.squareRect(file, rank)
+                val squareRect = metrics.squareRect(file, rank, previewState.orientation)
                 val squareColor = if (isLightSquare(file, rank)) previewState.boardStyle.lightSquareColor else previewState.boardStyle.darkSquareColor
                 drawRect(color = squareColor, topLeft = squareRect.topLeft, size = squareRect.size)
             }
@@ -40,7 +40,7 @@ internal object ShowcaseBoardRenderer {
         for (index in 0 until 64) {
             val piece = previewState.gameState.pieceAt(index) ?: continue
             val square = Square.fromIndex(index)
-            val squareRect = metrics.squareRect(square.file(), square.rank())
+            val squareRect = metrics.squareRect(square.file(), square.rank(), previewState.orientation)
             val inset = metrics.squareSize * (1f - previewState.pieceStyle.scale) / 2f
             val pieceRect = Rect(squareRect.left + inset, squareRect.top + inset, squareRect.right - inset, squareRect.bottom - inset)
             with(ShowcasePieceRenderer) { drawPiece(piece, pieceRect, previewState.pieceStyle, pieceTypeface) }

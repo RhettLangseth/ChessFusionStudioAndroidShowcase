@@ -2,7 +2,7 @@
 
 ## Context
 
-The private `ChessFusionStudio` project grew from an earlier Java chess codebase that I originally wrote myself. The engineering challenge was not just to build an Android UI, but to adapt that existing chess-domain logic into a maintainable Kotlin/Java Android application owned by Chess Fusion Studio LLC and planned for release as `Chess Fusion: Analysis Studio`.
+The private `ChessFusionStudio` project grew from an earlier Java chess codebase that I originally wrote myself. The engineering challenge was not just to build an Android UI, but to adapt that existing chess-domain logic into a maintainable Kotlin/Java Android application.
 
 This public repo preserves that story in a smaller form.
 
@@ -68,6 +68,7 @@ This curated version highlights:
 - practical use of agentic AI in a directed engineering workflow
 - custom rendering work
 - reusable Compose components
-- persistent state wired into a live preview workflow
+- persistent state wired into Analyze and Settings workflows
+- automated tests and CI around the public architecture
 
 That is a clearer and more defensible public artifact than releasing the entire product codebase.

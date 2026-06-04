@@ -2,22 +2,25 @@
 
 ## Overview
 
-This repo keeps the same high-level separation as the private `ChessFusionStudio` project owned by Chess Fusion Studio LLC:
-- `core`: platform-agnostic Java chess-domain slice
-- `app`: Kotlin/Compose Android showcase layer
+This repo preserves the full project's high-level Java-core and Kotlin/Compose separation while reducing the public feature surface:
 
-That split is one of the main architectural points of the showcase.
+- `core`: platform-agnostic Java models, FEN parsing, and curated sample positions
+- `app`: Compose screens, navigation, state mapping, persistence, controls, and rendering
+
+The result is a small MVVM-style application with a clear state-driven path from persisted settings to rendered output.
 
 ## Module Boundaries
 
 ### `core`
 
-`core` contains the small public-safe Java slice that the Android layer builds on:
+`core` contains the public-safe Java foundation:
+
 - model types such as `GameState`, `Piece`, `PieceType`, `Square`, and `Move`
-- `FenCodec` for board-state parsing/serialization
-- `ShowcaseBoardFactory` and `ShowcasePositions` to expose curated sample positions without publishing the full private rules engine
+- `FenCodec` for board-state parsing and serialization
+- `ShowcaseBoardFactory` and `ShowcasePositions` for curated sample positions
 
 Key files:
+
 - `core/src/main/java/com/chessfusionstudio/core/model/*`
 - `core/src/main/java/com/chessfusionstudio/core/io/FenCodec.java`
 - `core/src/main/java/com/chessfusionstudio/core/showcase/ShowcaseBoardFactory.java`
@@ -25,77 +28,72 @@ Key files:
 ### `app`
 
 `app` contains the Android-specific layer:
-- screen composition
-- persisted settings
-- `ViewModel` state mapping
-- custom rendering
-- custom controls
+
+- a small saved-state navigation host
+- Start, Analyze, Settings, and About screens
+- `ThemeStudioViewModel` state mapping
+- `ShowcaseSettingsRepository` and `ShowcaseSettingsStore`
+- custom board and ChessCancun piece rendering
+- reusable Compose controls and color editing
 
 Key files:
-- `app/src/main/java/com/chessfusionstudio/showcase/MainActivity.kt`
-- `app/src/main/java/com/chessfusionstudio/showcase/ui/showcase/ThemeStudioScreen.kt`
+
+- `app/src/main/java/com/chessfusionstudio/showcase/ui/navigation/ShowcaseNavHost.kt`
+- `app/src/main/java/com/chessfusionstudio/showcase/ui/analyze/ShowcaseAnalyzeScreen.kt`
+- `app/src/main/java/com/chessfusionstudio/showcase/ui/settings/ShowcaseSettingsScreen.kt`
 - `app/src/main/java/com/chessfusionstudio/showcase/ui/showcase/ThemeStudioViewModel.kt`
 - `app/src/main/java/com/chessfusionstudio/showcase/data/settings/ShowcaseSettingsStore.kt`
 - `app/src/main/java/com/chessfusionstudio/showcase/boardimage/ShowcaseBoardRenderer.kt`
 - `app/src/main/java/com/chessfusionstudio/showcase/ui/components/ShowcasePieceRenderer.kt`
 
-## Data Flow
+## State And Data Flow
 
-The current flow is intentionally simple and reviewable:
+1. `MainActivity` launches `ShowcaseNavHost`.
+2. The navigation host renders the current destination from a saveable back stack.
+3. Analyze and Settings observe `ThemeStudioViewModel.uiState`.
+4. `ThemeStudioViewModel` maps persisted repository snapshots into immutable `ThemeStudioUiState`.
+5. User settings update `ShowcaseSettingsStore`, which writes to `SharedPreferences` and publishes a `StateFlow`.
+6. The UI redraws from the new state.
+7. Analyze-only presentation state, such as board orientation and explanation visibility, uses `rememberSaveable`.
 
-1. `MainActivity` launches `ThemeStudioScreen`.
-2. `ThemeStudioScreen` obtains `ThemeStudioViewModel`.
-3. `ThemeStudioViewModel` exposes a mapped `ThemeStudioUiState` built from `ShowcaseSettingsStore`.
-4. `ShowcaseSettingsStore` persists showcase settings in `SharedPreferences` and publishes them through a `StateFlow`.
-5. The screen renders:
-   - a board preview via `ShowcaseChessBoard`
-   - section controls for board theme, piece theme, and position selection
-   - a split custom color picker dialog when a color swatch is edited
-6. `ShowcaseBoardRenderer` and `ShowcasePieceRenderer` convert `ThemeStudioUiState` into the visual preview.
+`ShowcaseSettingsRepository` keeps the ViewModel independent from Android persistence details and allows state mapping to be tested with a fake implementation.
+
+## Preset Analyze Workflow
+
+The public Analyze page intentionally demonstrates position review without publishing the private move-generation implementation.
+
+- curated FEN strings are parsed into Java `GameState` objects
+- reviewers can select positions directly or browse with previous and next controls
+- the selected preset persists through the shared settings repository
+- board flipping applies a tested 180-degree coordinate transform in the renderer
+- the page explains the boundary between public showcase behavior and the full private workflow
 
 ## Rendering Design
-
-The rendering path is intentionally reduced relative to the private repo.
 
 ### Board
 
 `ShowcaseBoardRenderer`:
-- computes board bounds and square geometry
-- draws a border and shadow
-- paints the 8x8 board squares
-- positions pieces based on `GameState`
 
-`ShowcaseBoardGeometry` contains the geometry calculations so layout math is separate from drawing.
+- resolves centered board bounds through `ShowcaseBoardGeometry`
+- draws a single rounded border and the 8x8 square grid
+- applies white-at-bottom or black-at-bottom coordinate mapping
+- positions pieces from `GameState`
 
 ### Pieces
 
 `ShowcasePieceRenderer` uses:
+
 - `ShowcasePieceGlyphs` for ChessCancun piece-character mapping
 - aligned glyph paths generated from `ChessCancun.ttf`
 - `ShowcasePieceMaskRasterizer` to fill interior piece backgrounds
 
-This keeps the showcase close to the full app's font-based rendering approach while omitting the broader private rendering pipeline for textures, lighting, caching, and font-specific production fixes.
+This keeps a real font-based rendering path while excluding the broader private rendering pipeline.
 
-## UI Primitive Reuse
+## Quality Evidence
 
-The repo intentionally keeps a few reusable components as whole files instead of flattening everything into one screen:
-- `AppSlider.kt`
-- `AppControlPrimitives.kt`
-- `DiscreteSliderMath.kt`
-- `OptionMath.kt`
+The repo includes:
 
-That is a more honest representation of how the app is structured than rewriting everything into one large showcase file.
-
-## Persistence Design
-
-`ShowcaseSettingsStore` is intentionally smaller than the private store.
-
-It persists only the values needed for the public workflow:
-- selected sample position
-- board palette
-- piece palette
-- custom board colors
-- custom piece colors
-- piece scale
-
-This shows the state-management pattern without dragging in unrelated product settings.
+- Java unit tests for FEN and curated positions
+- Kotlin unit tests for rendering math, controls, and ViewModel state mapping
+- Android tests for settings persistence, navigation, and a rendered-board smoke check
+- GitHub Actions automation for build, unit tests, Android-test compilation, and lint

@@ -2,6 +2,8 @@
 
 **By Rhett Langseth**
 
+[![Android CI](https://github.com/RhettLangseth/ChessFusionStudioAndroidShowcase/actions/workflows/android.yml/badge.svg)](https://github.com/RhettLangseth/ChessFusionStudioAndroidShowcase/actions/workflows/android.yml)
+
 This is a curated public showcase derived from my private `ChessFusionStudio` project. This repo demonstrates selected engineering areas from the broader original work without exposing the entire codebase.
 
 The full Android application is a modern mobile workspace for competitive chess players to analyze and archive their games, with aesthetic board and piece customization for a polished, personalized study experience.
@@ -19,14 +21,18 @@ This repo is intentionally narrow. It focuses on the parts that best demonstrate
 - Custom board and piece rendering
 - Reusable Compose controls
 - Persisted live-preview settings
-- Unit tests
+- Unit and UI tests with automated CI
 
 ## Showcase Screenshots
 
 Here are a few screenshots from the public showcase application:
 
-![Theme Studio home screen](media/readme/showcase-home.png)
-![Light square color picker dialog](media/readme/showcase-light-square-picker.png)
+![Showcase start page](media/readme/showcase-start.png)
+![Analyze page with default settings](media/readme/showcase-analyze-default.png)
+![Analyze page with Philidor Defense and Leaf board](media/readme/showcase-analyze-philidor-leaf.png)
+![Showcase settings page](media/readme/showcase-settings.png)
+![Settings page with color picker open](media/readme/showcase-settings-color-picker.png)
+![Showcase about page](media/readme/showcase-about.png)
 
 ## Full Application Screenshots
 
@@ -42,7 +48,7 @@ Here are a few runtime screenshots from the full Android application:
 
 ## Reviewer Guide
 
-This showcase is organized around a focused board-preview and settings workflow. It demonstrates MVVM-style Compose architecture, Java chess-domain modeling, custom board and piece rendering, reusable controls, and persisted live-preview settings.
+This showcase is organized around focused Analyze and Settings workflows. It demonstrates MVVM-style Compose architecture, Java chess-domain modeling, custom board and piece rendering, reusable controls, persisted state, automated tests, and an explicit public/private code boundary.
 
 Recommended files to review:
 - [ShowcaseSettingsScreen.kt](app/src/main/java/com/chessfusionstudio/showcase/ui/settings/ShowcaseSettingsScreen.kt)
@@ -53,9 +59,12 @@ Recommended files to review:
 - [ColorPickerDialog.kt](app/src/main/java/com/chessfusionstudio/showcase/ui/components/ColorPickerDialog.kt)
 - [AppSlider.kt](app/src/main/java/com/chessfusionstudio/showcase/ui/components/AppSlider.kt)
 - [FenCodec.java](core/src/main/java/com/chessfusionstudio/core/io/FenCodec.java)
+- [Architecture](docs/architecture.md)
+- [Public Scope](docs/public-scope.md)
 
 What to try in the app:
-- switch between sample chess positions
+- browse curated positions from the Analyze page
+- flip the board to exercise the renderer's coordinate transform
 - adjust board and piece palettes
 - fine-tune colors with the custom picker
 - adjust piece scale with the custom slider
@@ -68,8 +77,7 @@ Requires a standard Android development setup: JDK 17, Android SDK, and an emula
 From the repo root:
 
 ```powershell
-.\gradlew :app:compileDebugKotlin
-.\gradlew :core:test :app:testDebugUnitTest
+.\gradlew :core:test :app:testDebugUnitTest :app:compileDebugAndroidTestKotlin :app:lintDebug :app:assembleDebug
 ```
 
 To install the showcase on an emulator or device:
@@ -78,13 +86,19 @@ To install the showcase on an emulator or device:
 .\gradlew :app:installDebug
 ```
 
+With an emulator or device connected, run the persistence, navigation, and rendering-smoke tests:
+
+```powershell
+.\gradlew :app:connectedDebugAndroidTest
+```
+
 ## Tech Stack
 
 - Kotlin, Java
 - Android, Jetpack Compose, Material 3
 - ViewModel, StateFlow, SharedPreferences
 - Custom Canvas drawing
-- Gradle, JUnit
+- Gradle, JUnit, Compose UI testing, GitHub Actions
 
 ## Notice
 

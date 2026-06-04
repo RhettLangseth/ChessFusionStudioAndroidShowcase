@@ -20,6 +20,7 @@ internal fun SaturationSlider(
         trackFill = AppSliderTrackFill.Gradient(listOf(Color(0xFFB9B9B9), vividColor)),
         valueLabel = { resolved -> "${(resolved * 100f).toInt()}%" },
         style = AppSliderDefaults.ColorPickerVisualStyle,
+        accessibilityLabel = "Saturation",
         modifier = modifier
     )
 }

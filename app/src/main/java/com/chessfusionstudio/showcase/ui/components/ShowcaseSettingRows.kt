@@ -13,9 +13,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.compositionLocalOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -25,21 +22,12 @@ import androidx.compose.ui.unit.dp
 
 private val SettingRowMinHeight = 48.dp
 private val SettingRowInnerHorizontalPadding = AppSpacing.Page
+private val SettingRowInnerVerticalPadding = 8.dp
 private val SettingRowInputStartPadding = 12.dp
 private const val SettingRowShadeAlpha = 0.42f
 
-private class SettingRowCounter(var index: Int = 0)
-
-private val LocalSettingRowCounter = compositionLocalOf<SettingRowCounter?> { null }
-
 @Composable
-internal fun ZebraSettingRows(content: @Composable () -> Unit) {
-    val counter = remember { SettingRowCounter() }
-    counter.index = 0
-    CompositionLocalProvider(LocalSettingRowCounter provides counter) {
-        content()
-    }
-}
+internal fun SettingRows(content: @Composable () -> Unit) = content()
 
 @Composable
 internal fun SettingRow(
@@ -49,19 +37,7 @@ internal fun SettingRow(
     description: String? = null,
     input: @Composable () -> Unit
 ) {
-    val rowCounter = LocalSettingRowCounter.current
-    val rowIndex = if (rowCounter != null) {
-        val current = rowCounter.index
-        rowCounter.index = current + 1
-        current
-    } else {
-        0
-    }
-    val rowContainerColor = if (rowIndex % 2 == 0) {
-        MaterialTheme.colorScheme.surfaceVariant.copy(alpha = SettingRowShadeAlpha)
-    } else {
-        MaterialTheme.colorScheme.surfaceVariant.copy(alpha = SettingRowShadeAlpha)
-    }
+    val rowContainerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = SettingRowShadeAlpha)
     val inputWidthModifier = if (inputFill) {
         Modifier.fillMaxWidth()
     } else {
@@ -79,7 +55,10 @@ internal fun SettingRow(
             modifier = Modifier
                 .fillMaxWidth()
                 .heightIn(min = SettingRowMinHeight)
-                .padding(horizontal = rowHorizontalPadding),
+                .padding(
+                    horizontal = rowHorizontalPadding,
+                    vertical = SettingRowInnerVerticalPadding
+                ),
             verticalArrangement = Arrangement.Center
         ) {
             Row(
@@ -104,7 +83,7 @@ internal fun SettingRow(
             if (description != null) {
                 Text(
                     text = description,
-                    modifier = Modifier.padding(top = 4.dp, bottom = 8.dp),
+                    modifier = Modifier.padding(top = 4.dp),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -119,6 +98,7 @@ internal fun <T> DropdownSetting(
     options: List<T>,
     optionLabel: (T) -> String,
     onSelected: (T) -> Unit,
+    accessibilityLabel: String,
     modifier: Modifier = Modifier
 ) {
     OutlinedDropdownSelector(
@@ -127,6 +107,7 @@ internal fun <T> DropdownSetting(
         optionLabel = optionLabel,
         onSelected = onSelected,
         modifier = modifier,
-        contentPadding = androidx.compose.foundation.layout.PaddingValues(horizontal = 12.dp, vertical = 0.dp)
+        contentPadding = androidx.compose.foundation.layout.PaddingValues(horizontal = 12.dp, vertical = 0.dp),
+        accessibilityLabel = accessibilityLabel
     )
 }

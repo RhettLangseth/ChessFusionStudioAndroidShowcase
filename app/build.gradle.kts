@@ -6,15 +6,14 @@ plugins {
 android {
     namespace = "com.chessfusionstudio.showcase"
     compileSdk {
-        version = release(36) {
-            minorApiLevel = 1
-        }
+        version = release(37)
     }
 
     defaultConfig {
         applicationId = "com.chessfusionstudio.showcase"
-        minSdk = 21
-        targetSdk = 36
+        minSdk = 23
+        //noinspection EditedTargetSdkVersion
+        targetSdk = 37
         versionCode = 1
         versionName = "1.0"
 
@@ -55,6 +54,7 @@ dependencies {
     implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.compose.material.icons.extended)
     testImplementation(libs.junit)
+    testImplementation(libs.kotlinx.coroutines.test)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))

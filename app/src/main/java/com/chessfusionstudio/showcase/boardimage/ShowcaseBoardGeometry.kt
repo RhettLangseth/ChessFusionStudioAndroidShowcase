@@ -6,9 +6,15 @@ import androidx.compose.ui.geometry.Size
 
 internal object ShowcaseBoardGeometry {
     data class Metrics(val boardRect: Rect, val squareSize: Float, val borderWidth: Float, val cornerRadius: Float) {
-        fun squareRect(file: Int, rank: Int): Rect {
-            val left = boardRect.left + (file * squareSize)
-            val top = boardRect.top + ((7 - rank) * squareSize)
+        fun squareRect(
+            file: Int,
+            rank: Int,
+            orientation: ShowcaseBoardOrientation = ShowcaseBoardOrientation.WhiteAtBottom
+        ): Rect {
+            val displayFile = if (orientation == ShowcaseBoardOrientation.WhiteAtBottom) file else 7 - file
+            val displayRank = if (orientation == ShowcaseBoardOrientation.WhiteAtBottom) 7 - rank else rank
+            val left = boardRect.left + (displayFile * squareSize)
+            val top = boardRect.top + (displayRank * squareSize)
             return Rect(left, top, left + squareSize, top + squareSize)
         }
     }

@@ -3,56 +3,52 @@
 ## Included
 
 This repo intentionally includes the following public-facing slices:
+
 - selected Java core model files
-- FEN parsing
+- FEN parsing and serialization
 - curated sample board positions
-- a reduced custom board renderer
-- a reduced custom piece renderer
-- reusable slider and dropdown primitives
-- a split custom color picker
-- a reduced persisted settings layer
-- a focused `Theme Studio` screen
-- unit tests for the copied/reused logic
+- a reduced custom board and piece renderer
+- tested board-orientation transforms
+- reusable Compose controls and a custom color picker
+- a persisted settings repository exposed through `StateFlow`
+- a focused multi-screen Compose workflow
+- unit, persistence, navigation, and rendering-smoke tests
+- automated build, test, and lint checks
 
 ## Excluded
 
 This repo intentionally excludes:
+
 - PGN application flows and file handling
 - engine communication and bundled native engine assets
-- the full private move-generation / rules implementation
-- the broader private analyze workflow
-- the private warning/confirmation plumbing
-- the larger private asset catalogs
+- the full private move-generation and rules implementation
+- move input and the broader private Analyze workflow
+- the private warning and confirmation plumbing
+- the larger private rendering and asset catalogs
 - the legacy reference tree from the earlier codebase
 
-## Why The Rules Engine Is Reduced
+## Why Analyze Uses Preset Positions
 
-The original private codebase contains a broader chess implementation than this public repo needs.
+The private codebase contains a broader chess implementation than this public repo needs. Publishing that rules layer would materially increase exposure without strengthening the showcase's main Android-engineering story.
 
-For the public showcase, the goal is to demonstrate:
-- domain separation
-- Android adaptation
-- rendering
-- UI architecture
+Curated positions provide a deliberate compromise:
 
-The full private rules layer would increase exposure without materially improving that story, so this repo uses curated sample positions instead.
+- the Java core still parses real FEN state
+- the Analyze page offers a complete position-review workflow
+- persisted selection and board flipping demonstrate state and rendering behavior
+- private move-generation algorithms remain private
 
-## Why The Renderer Is Reduced Instead Of Fully Removed
+## Why The Renderer Remains
 
-Rendering is one of the most differentiated parts of the project. Removing it would weaken the showcase too much.
+Rendering is one of the project's most differentiated technical areas. Removing it would weaken the showcase too much.
 
-The compromise used here is:
-- keep a real custom rendering path
-- narrow it to the public `Theme Studio` flow
-- avoid carrying over the full private rendering surface
-
-That keeps the repo visually and technically interesting while still reducing exposure.
+The public renderer therefore keeps a real custom drawing path while narrowing the supported styling and excluding the broader private production pipeline.
 
 ## Review Time Goal
 
-This repo is designed so a reviewer can understand the key engineering ideas quickly:
-- one focused workflow
-- small number of important entry points
-- explicit docs explaining what is and is not public
+The repo is designed so a reviewer can understand the key engineering ideas quickly:
 
-That is a better public artifact than a lightly trimmed copy of the full private app.
+- one clear Analyze and Settings workflow
+- a small number of important entry points
+- automated quality checks
+- explicit documentation of the public and private boundary

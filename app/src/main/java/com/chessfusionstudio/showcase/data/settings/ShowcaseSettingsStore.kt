@@ -47,17 +47,20 @@ data class ShowcaseSettingsSnapshot(
     val pieceScale: Float = DEFAULT_PIECE_SCALE
 )
 
-class ShowcaseSettingsStore(context: Context) {
+class ShowcaseSettingsStore(context: Context) : ShowcaseSettingsRepository {
     private val prefs: SharedPreferences = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
     private val _settings = MutableStateFlow(load())
-    val settings: StateFlow<ShowcaseSettingsSnapshot> = _settings.asStateFlow()
+    override val settings: StateFlow<ShowcaseSettingsSnapshot> = _settings.asStateFlow()
 
-    fun setPositionId(value: String) = update { it.copy(positionId = value) }
-    fun applyBoardPalette(paletteId: String, lightSquareArgb: Int, darkSquareArgb: Int) = update { it.copy(boardPaletteId = paletteId, lightSquareArgb = lightSquareArgb, darkSquareArgb = darkSquareArgb) }
-    fun applyPiecePalette(paletteId: String, pieceBackgroundArgb: Int, pieceForegroundArgb: Int) = update { it.copy(piecePaletteId = paletteId, pieceBackgroundArgb = pieceBackgroundArgb, pieceForegroundArgb = pieceForegroundArgb) }
-    fun setLightSquareArgb(value: Int) = update { it.copy(boardPaletteId = BOARD_PALETTE_CUSTOM, lightSquareArgb = normalizeOpaqueColorArgb(value)) }
-    fun setDarkSquareArgb(value: Int) = update { it.copy(boardPaletteId = BOARD_PALETTE_CUSTOM, darkSquareArgb = normalizeOpaqueColorArgb(value)) }
-    fun setPieceScale(value: Float) = update { it.copy(pieceScale = value.coerceIn(0.45f, 0.95f)) }
+    override fun setPositionId(value: String) = update { it.copy(positionId = value) }
+    override fun applyBoardPalette(paletteId: String, lightSquareArgb: Int, darkSquareArgb: Int) = update { it.copy(boardPaletteId = paletteId, lightSquareArgb = lightSquareArgb, darkSquareArgb = darkSquareArgb) }
+    override fun applyPiecePalette(paletteId: String, pieceBackgroundArgb: Int, pieceForegroundArgb: Int) = update { it.copy(piecePaletteId = paletteId, pieceBackgroundArgb = pieceBackgroundArgb, pieceForegroundArgb = pieceForegroundArgb) }
+    override fun setLightSquareArgb(value: Int) = update { it.copy(boardPaletteId = BOARD_PALETTE_CUSTOM, lightSquareArgb = normalizeOpaqueColorArgb(value)) }
+    override fun setDarkSquareArgb(value: Int) = update { it.copy(boardPaletteId = BOARD_PALETTE_CUSTOM, darkSquareArgb = normalizeOpaqueColorArgb(value)) }
+    override fun setPieceScale(value: Float) = update { it.copy(pieceScale = value.coerceIn(0.45f, 0.95f)) }
+    override fun restoreAppearanceDefaults() = update { current ->
+        ShowcaseSettingsSnapshot(positionId = current.positionId)
+    }
 
     private fun update(transform: (ShowcaseSettingsSnapshot) -> ShowcaseSettingsSnapshot) {
         val updated = transform(_settings.value)

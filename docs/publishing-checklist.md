@@ -1,6 +1,6 @@
-# Publishing Checklist
+# Portfolio Release Checklist
 
-Use this before making the repo public.
+Use this before sharing a new portfolio release.
 
 ## Code And Assets
 
@@ -11,8 +11,8 @@ Use this before making the repo public.
 
 ## Repo Presentation
 
-- Add 3 to 5 real screenshots under `media/screenshots/`.
-- Add a short demo GIF or screen recording under `media/`.
+- Capture current screenshots only after the pages are approved.
+- Record a short demo only after the pages are approved.
 - Re-read the README from a first-time reviewer perspective.
 - Pin the repo on your GitHub profile after publishing.
 
@@ -21,11 +21,12 @@ Use this before making the repo public.
 Run:
 
 ```powershell
-.\gradlew :app:compileDebugKotlin
-.\gradlew :core:test :app:testDebugUnitTest
+.\gradlew :core:test :app:testDebugUnitTest :app:compileDebugAndroidTestKotlin :app:lintDebug :app:assembleDebug
+.\gradlew :app:connectedDebugAndroidTest
 ```
 
 ## Final Review
 
-- Make sure the repo still tells the intended story: Java core to Android adaptation, custom rendering, reusable controls, and curated scope.
+- Make sure GitHub Actions passes.
+- Make sure the repo still tells the intended story: Java core to Android adaptation, custom rendering, state-driven UI, reusable controls, and curated scope.
 - Remove anything you would need to verbally ask reviewers to ignore.

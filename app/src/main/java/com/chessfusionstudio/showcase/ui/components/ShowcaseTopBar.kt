@@ -19,6 +19,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.chessfusionstudio.showcase.ui.navigation.ShowcaseDestination
@@ -80,7 +81,7 @@ internal fun ShowcaseTopBarIconButton(
             .size(ShowcaseTopBarButtonSize)
             .clip(shape)
             .background(MaterialTheme.colorScheme.secondaryContainer)
-            .clickable(onClick = onClick),
+            .clickable(role = Role.Button, onClick = onClick),
         contentAlignment = Alignment.Center
     ) {
         Icon(

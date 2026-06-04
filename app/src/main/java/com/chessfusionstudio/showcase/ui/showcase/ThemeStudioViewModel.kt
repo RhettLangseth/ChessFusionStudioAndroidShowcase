@@ -56,15 +56,25 @@ private val piecePaletteOptions = listOf(
     PalettePairOption(PIECE_PALETTE_MINT, "Mint", 0xFFD8F0E4.toInt(), 0xFF24323A.toInt())
 )
 
-class ThemeStudioViewModel(private val settingsStore: ShowcaseSettingsStore) : ViewModel() {
+class ThemeStudioViewModel(private val settingsStore: ShowcaseSettingsRepository) : ViewModel() {
     val uiState: StateFlow<ThemeStudioUiState> = settingsStore.settings.map(::toUiState).stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), toUiState(settingsStore.settings.value))
 
     fun selectPosition(option: PositionOption) = settingsStore.setPositionId(option.id)
+    fun selectPreviousPosition() = selectAdjacentPosition(offset = -1)
+    fun selectNextPosition() = selectAdjacentPosition(offset = 1)
     fun applyBoardPalette(option: PalettePairOption) { if (option.id != BOARD_PALETTE_CUSTOM) settingsStore.applyBoardPalette(option.id, option.firstColorArgb, option.secondColorArgb) }
     fun applyPiecePalette(option: PalettePairOption) = settingsStore.applyPiecePalette(option.id, option.firstColorArgb, option.secondColorArgb)
     fun updateLightSquareColor(argb: Int) = settingsStore.setLightSquareArgb(argb)
     fun updateDarkSquareColor(argb: Int) = settingsStore.setDarkSquareArgb(argb)
     fun updatePieceScale(value: Float) = settingsStore.setPieceScale(value)
+    fun restoreAppearanceDefaults() = settingsStore.restoreAppearanceDefaults()
+
+    private fun selectAdjacentPosition(offset: Int) {
+        val currentIndex = positionOptions.indexOfFirst { it.id == settingsStore.settings.value.positionId }
+            .coerceAtLeast(0)
+        val nextIndex = (currentIndex + offset + positionOptions.size) % positionOptions.size
+        settingsStore.setPositionId(positionOptions[nextIndex].id)
+    }
 
     private fun toUiState(snapshot: ShowcaseSettingsSnapshot): ThemeStudioUiState {
         val selectedPosition = positionOptions.firstOrNull { it.id == snapshot.positionId } ?: positionOptions.first()

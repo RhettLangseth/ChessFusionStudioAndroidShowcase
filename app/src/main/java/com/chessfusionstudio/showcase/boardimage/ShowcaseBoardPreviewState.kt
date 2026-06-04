@@ -6,5 +6,6 @@ import com.chessfusionstudio.showcase.ui.components.ShowcasePieceStyle
 data class ShowcaseBoardPreviewState(
     val gameState: GameState,
     val boardStyle: ShowcaseBoardStyle,
-    val pieceStyle: ShowcasePieceStyle
+    val pieceStyle: ShowcasePieceStyle,
+    val orientation: ShowcaseBoardOrientation = ShowcaseBoardOrientation.WhiteAtBottom
 )

@@ -6,26 +6,36 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -35,7 +45,7 @@ import com.chessfusionstudio.showcase.ui.components.DropdownSetting
 import com.chessfusionstudio.showcase.ui.components.SettingRow
 import com.chessfusionstudio.showcase.ui.components.ShowcaseChessBoard
 import com.chessfusionstudio.showcase.ui.components.ShowcasePageScaffold
-import com.chessfusionstudio.showcase.ui.components.ZebraSettingRows
+import com.chessfusionstudio.showcase.ui.components.SettingRows
 import com.chessfusionstudio.showcase.ui.navigation.ShowcaseDestination
 import com.chessfusionstudio.showcase.ui.showcase.ThemeStudioViewModel
 
@@ -53,11 +63,21 @@ internal fun ShowcaseSettingsRoute(
     viewModel: ThemeStudioViewModel = viewModel(factory = ThemeStudioViewModel.factory(LocalContext.current.applicationContext))
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    val editingColor = remember { mutableStateOf<EditableSettingColor?>(null) }
+    val editingColor = rememberSaveable { mutableStateOf<EditableSettingColor?>(null) }
+    val showRestoreDefaultsDialog = rememberSaveable { mutableStateOf(false) }
 
     ShowcasePageScaffold(
         destination = ShowcaseDestination.Settings,
         onBackClick = onBackClick,
+        topBarActions = {
+            OutlinedButton(
+                onClick = { showRestoreDefaultsDialog.value = true },
+                modifier = Modifier.height(40.dp),
+                contentPadding = PaddingValues(horizontal = 12.dp, vertical = 0.dp)
+            ) {
+                Text("Restore Defaults", maxLines = 1, softWrap = false)
+            }
+        },
         modifier = modifier
     ) { innerPadding ->
         Column(
@@ -75,34 +95,23 @@ internal fun ShowcaseSettingsRoute(
                 ) {
                     ShowcaseChessBoard(
                         previewState = uiState.previewState,
+                        accessibilityLabel = "${uiState.selectedPosition.label} settings preview board",
                         modifier = Modifier.width(previewSize)
                     )
                 }
             }
-            ZebraSettingRows {
-                SettingRow(
-                    label = "Sample Position",
-                    inputFill = true,
-                    description = "Changes the game position displayed on the preview board by selecting a predefined FEN string parsed into a Java GameState."
-                ) {
-                    DropdownSetting(
-                        selected = uiState.selectedPosition,
-                        options = uiState.positionOptions,
-                        optionLabel = { it.label },
-                        onSelected = viewModel::selectPosition,
-                        modifier = Modifier.fillMaxWidth()
-                    )
-                }
+            SettingRows {
                 SettingRow(
                     label = "Board Palette",
                     inputFill = true,
-                    description = "Updates both persisted square colors from a preset pair; the renderer assigns them using file-and-rank parity."
+                    description = "Updates both persisted square colors from a preset pair. The renderer assigns them using file-and-rank parity."
                 ) {
                     DropdownSetting(
                         selected = uiState.selectedBoardPalette,
                         options = uiState.boardPaletteOptions,
                         optionLabel = { it.label },
                         onSelected = viewModel::applyBoardPalette,
+                        accessibilityLabel = "Board palette",
                         modifier = Modifier.fillMaxWidth()
                     )
                 }
@@ -111,6 +120,7 @@ internal fun ShowcaseSettingsRoute(
                     description = "Persists a custom ARGB color for the parity set that includes h1, then feeds it into the renderer."
                 ) {
                     ColorSettingButton(
+                        label = "Light square color",
                         color = uiState.lightSquareColor,
                         onClick = { editingColor.value = EditableSettingColor.LightSquare }
                     )
@@ -120,6 +130,7 @@ internal fun ShowcaseSettingsRoute(
                     description = "Persists a custom ARGB color for the opposite parity set, then feeds it into the renderer."
                 ) {
                     ColorSettingButton(
+                        label = "Dark square color",
                         color = uiState.darkSquareColor,
                         onClick = { editingColor.value = EditableSettingColor.DarkSquare }
                     )
@@ -134,6 +145,7 @@ internal fun ShowcaseSettingsRoute(
                         options = uiState.piecePaletteOptions,
                         optionLabel = { it.label },
                         onSelected = viewModel::applyPiecePalette,
+                        accessibilityLabel = "Piece palette",
                         modifier = Modifier.fillMaxWidth()
                     )
                 }
@@ -147,6 +159,7 @@ internal fun ShowcaseSettingsRoute(
                         onValueChange = viewModel::updatePieceScale,
                         valueRange = 0.45f..0.95f,
                         valueLabel = { value -> "${(value * 100f).toInt()}%" },
+                        accessibilityLabel = "Piece scale",
                         modifier = Modifier.fillMaxWidth()
                     )
                 }
@@ -173,15 +186,45 @@ internal fun ShowcaseSettingsRoute(
             }
         )
     }
+
+    if (showRestoreDefaultsDialog.value) {
+        AlertDialog(
+            onDismissRequest = { showRestoreDefaultsDialog.value = false },
+            title = { Text("Restore default settings?") },
+            text = { Text("This restores the board and piece appearance settings shown on this page.") },
+            confirmButton = {
+                Button(
+                    onClick = {
+                        showRestoreDefaultsDialog.value = false
+                        viewModel.restoreAppearanceDefaults()
+                    }
+                ) {
+                    Text("Restore")
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { showRestoreDefaultsDialog.value = false }) {
+                    Text("Cancel")
+                }
+            }
+        )
+    }
 }
 
 @Composable
 private fun ColorSettingButton(
+    label: String,
     color: Color,
     onClick: () -> Unit
 ) {
+    val formattedColor = formatRgbHex(color)
     Row(
-        modifier = Modifier.clickable(onClick = onClick),
+        modifier = Modifier
+            .heightIn(min = 48.dp)
+            .clickable(role = Role.Button, onClick = onClick)
+            .semantics {
+                contentDescription = "$label, $formattedColor"
+            },
         horizontalArrangement = Arrangement.spacedBy(8.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -191,7 +234,7 @@ private fun ColorSettingButton(
                 .background(color, CircleShape)
         )
         Text(
-            text = formatRgbHex(color),
+            text = formattedColor,
             style = MaterialTheme.typography.bodyMedium
         )
     }

@@ -29,21 +29,21 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
-import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.CompositingStrategy
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.graphics.lerp
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.input.pointer.positionChanged
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.semantics.ProgressBarRangeInfo
+import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.progressBarRangeInfo
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.setProgress
 import androidx.compose.ui.zIndex
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.IntRect
@@ -100,13 +100,14 @@ fun AppSlider(
     value: Float,
     onValueChange: (Float) -> Unit,
     valueRange: ClosedFloatingPointRange<Float>,
+    modifier: Modifier = Modifier,
     trackFill: AppSliderTrackFill = AppSliderTrackFill.ThemeDefault,
     showValueBubble: Boolean = false,
     valueLabel: ((Float) -> String)? = null,
     style: AppSliderVisualStyle = AppSliderDefaults.themeVisualStyle(),
     onInteractionStart: (() -> Unit)? = null,
     onValueChangeFinished: (() -> Unit)? = null,
-    modifier: Modifier = Modifier
+    accessibilityLabel: String? = null
 ) {
     val rangeStart = minOf(valueRange.start, valueRange.endInclusive)
     val rangeEnd = maxOf(valueRange.start, valueRange.endInclusive)
@@ -127,68 +128,13 @@ fun AppSlider(
             }
             onValueChange(resolvedValue)
         },
-        discreteOptionCount = null,
         trackFill = trackFill,
         showValueBubble = showValueBubble,
         bubbleText = valueLabel?.invoke(value) ?: defaultContinuousValueLabel(value),
         style = style,
         onInteractionStart = onInteractionStart,
         onValueChangeFinished = onValueChangeFinished,
-        modifier = modifier
-    )
-}
-
-@Composable
-fun <T> AppSlider(
-    selectedOption: T,
-    options: List<T>,
-    onOptionSelected: (T) -> Unit,
-    trackFill: AppSliderTrackFill = AppSliderTrackFill.ThemeDefault,
-    showValueBubble: Boolean = false,
-    optionLabels: List<String>? = null,
-    style: AppSliderVisualStyle = AppSliderDefaults.themeVisualStyle(),
-    onInteractionStart: (() -> Unit)? = null,
-    onValueChangeFinished: (() -> Unit)? = null,
-    modifier: Modifier = Modifier
-) {
-    if (options.isEmpty()) {
-        return
-    }
-    require(optionLabels == null || optionLabels.size == options.size) {
-        "AppSlider optionLabels must have the same size as options."
-    }
-    val maxIndex = options.lastIndex.coerceAtLeast(0)
-    val selectedIndex = options.indexOf(selectedOption).let { index ->
-        if (index < 0) {
-            0
-        } else {
-            index
-        }
-    }
-    val resolvedOptionLabels = optionLabels ?: options.map { it.toString() }
-    val normalizedValue = if (maxIndex <= 0) {
-        0f
-    } else {
-        selectedIndex.toFloat() / maxIndex.toFloat()
-    }
-
-    AppSliderNormalized(
-        normalizedValue = normalizedValue,
-        onNormalizedValueChange = { normalized ->
-            val index = if (maxIndex <= 0) {
-                0
-            } else {
-                (normalized * maxIndex.toFloat()).roundToInt().coerceIn(0, maxIndex)
-            }
-            onOptionSelected(options[index])
-        },
-        discreteOptionCount = options.size,
-        trackFill = trackFill,
-        showValueBubble = showValueBubble,
-        bubbleText = resolvedOptionLabels[selectedIndex],
-        style = style,
-        onInteractionStart = onInteractionStart,
-        onValueChangeFinished = onValueChangeFinished,
+        accessibilityLabel = accessibilityLabel,
         modifier = modifier
     )
 }
@@ -197,13 +143,13 @@ fun <T> AppSlider(
 private fun AppSliderNormalized(
     normalizedValue: Float,
     onNormalizedValueChange: (Float) -> Unit,
-    discreteOptionCount: Int?,
     trackFill: AppSliderTrackFill,
     showValueBubble: Boolean,
     bubbleText: String,
     style: AppSliderVisualStyle,
     onInteractionStart: (() -> Unit)?,
     onValueChangeFinished: (() -> Unit)?,
+    accessibilityLabel: String?,
     modifier: Modifier = Modifier
 ) {
     var canvasSize by remember { mutableStateOf(IntSize.Zero) }
@@ -211,20 +157,13 @@ private fun AppSliderNormalized(
     val onNormalizedValueChangeState = rememberUpdatedState(onNormalizedValueChange)
     val onInteractionStartState = rememberUpdatedState(onInteractionStart)
     val onValueChangeFinishedState = rememberUpdatedState(onValueChangeFinished)
-    val discreteOptionCountState = rememberUpdatedState(discreteOptionCount)
     val density = LocalDensity.current
     val knobOverflowPx = with(density) { style.knobOverflow.toPx() }
     val knobBodyWidthPx = with(density) { style.knobBodyWidth.toPx() }
     val knobVerticalOverflowPx = with(density) { style.knobVerticalOverflow.toPx() }
     val barHeightPx = with(density) { style.barHeight.toPx() }
     val resolvedNormalizedValue = normalizedValue.coerceIn(0f, 1f)
-    val semanticSteps = if (discreteOptionCount == null) {
-        0
-    } else {
-        (discreteOptionCount - 2).coerceAtLeast(0)
-    }
     val fallbackTrackColor = SwitchDefaults.colors().checkedTrackColor
-    val discreteMarkerRadiusPx = with(density) { 1.5.dp.toPx() }
     val bubbleGapPx = with(density) { 4.dp.roundToPx() }
 
     fun updateFromOffset(offset: Offset) {
@@ -237,9 +176,7 @@ private fun AppSliderNormalized(
         }
         val knobLeft = (offset.x - (resolvedKnobWidthPx / 2f)).coerceIn(0f, knobTravel)
         val normalized = (knobLeft / knobTravel).coerceIn(0f, 1f)
-        onNormalizedValueChangeState.value(
-            snapNormalized(normalized, discreteOptionCountState.value)
-        )
+        onNormalizedValueChangeState.value(normalized)
     }
 
     fun resolveTrackGeometry(containerHeightPx: Float): Pair<Float, Float> {
@@ -263,14 +200,21 @@ private fun AppSliderNormalized(
             .then(modifier)
             .zIndex(1f)
             .semantics {
+                if (accessibilityLabel != null) {
+                    contentDescription = accessibilityLabel
+                }
                 progressBarRangeInfo = ProgressBarRangeInfo(
                     current = resolvedNormalizedValue,
                     range = 0f..1f,
-                    steps = semanticSteps
+                    steps = 0
                 )
+                setProgress { targetValue ->
+                    onNormalizedValueChangeState.value(targetValue.coerceIn(0f, 1f))
+                    true
+                }
             }
             .onSizeChanged { canvasSize = it }
-            .pointerInput(canvasSize, discreteOptionCount, style) {
+            .pointerInput(canvasSize, style) {
                 awaitEachGesture {
                     val firstDown = awaitFirstDown(
                         requireUnconsumed = false
@@ -389,11 +333,6 @@ private fun AppSliderNormalized(
             val knobLeft = resolvedNormalizedValue * knobRange
             val themeDefaultActiveWidth = (knobLeft + resolvedKnobWidthPx)
                 .coerceIn(0f, size.width)
-            val rightMarkerColor = resolveLeftOfKnobColor(
-                trackFill = trackFill,
-                fallbackTrackColor = fallbackTrackColor,
-                knobNormalized = resolvedNormalizedValue
-            )
 
             when (trackFill) {
                 is AppSliderTrackFill.Solid -> {
@@ -454,32 +393,6 @@ private fun AppSliderNormalized(
                         cornerRadius = CornerRadius(trackCorner, trackCorner),
                         style = Stroke(width = 1.dp.toPx())
                     )
-                }
-            }
-
-            if (discreteOptionCount != null && discreteOptionCount > 1) {
-                val markerCenterY = trackTop + (trackHeight / 2f)
-                val maxIndex = (discreteOptionCount - 1).coerceAtLeast(1)
-                val selectedIndex = (resolvedNormalizedValue * maxIndex.toFloat())
-                    .roundToInt()
-                    .coerceIn(0, maxIndex)
-                for (index in 0..maxIndex) {
-                    val optionNormalized = index.toFloat() / maxIndex.toFloat()
-                    val markerCenterX = (resolvedKnobWidthPx / 2f) + (optionNormalized * knobRange)
-                    if (index <= selectedIndex) {
-                        drawCircle(
-                            color = Color.Transparent,
-                            radius = discreteMarkerRadiusPx,
-                            center = Offset(markerCenterX, markerCenterY),
-                            blendMode = BlendMode.Clear
-                        )
-                    } else {
-                        drawCircle(
-                            color = rightMarkerColor,
-                            radius = discreteMarkerRadiusPx,
-                            center = Offset(markerCenterX, markerCenterY)
-                        )
-                    }
                 }
             }
         }
@@ -580,50 +493,6 @@ private fun SliderValueBubble(
             )
         }
     }
-}
-
-private fun snapNormalized(
-    normalized: Float,
-    discreteOptionCount: Int?
-): Float {
-    if (discreteOptionCount == null || discreteOptionCount <= 1) {
-        return normalized.coerceIn(0f, 1f)
-    }
-    val maxIndex = (discreteOptionCount - 1).coerceAtLeast(1)
-    val snappedIndex = (normalized.coerceIn(0f, 1f) * maxIndex.toFloat())
-        .roundToInt()
-        .coerceIn(0, maxIndex)
-    return snappedIndex.toFloat() / maxIndex.toFloat()
-}
-
-private fun resolveLeftOfKnobColor(
-    trackFill: AppSliderTrackFill,
-    fallbackTrackColor: Color,
-    knobNormalized: Float
-): Color {
-    return when (trackFill) {
-        AppSliderTrackFill.ThemeDefault -> fallbackTrackColor
-        is AppSliderTrackFill.Solid -> trackFill.color
-        is AppSliderTrackFill.Gradient -> sampleGradientColor(trackFill.colors, knobNormalized)
-    }
-}
-
-private fun sampleGradientColor(
-    colors: List<Color>,
-    fraction: Float
-): Color {
-    if (colors.isEmpty()) {
-        return Color.Transparent
-    }
-    if (colors.size == 1) {
-        return colors.first()
-    }
-    val clamped = fraction.coerceIn(0f, 1f)
-    val scaled = clamped * colors.lastIndex.toFloat()
-    val leftIndex = scaled.toInt().coerceIn(0, colors.lastIndex - 1)
-    val rightIndex = leftIndex + 1
-    val localFraction = (scaled - leftIndex.toFloat()).coerceIn(0f, 1f)
-    return lerp(colors[leftIndex], colors[rightIndex], localFraction)
 }
 
 private fun defaultContinuousValueLabel(value: Float): String {
