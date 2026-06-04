@@ -1,4 +1,4 @@
-# Chess Fusion Studio Android Showcase
+# Chess Fusion Studio: Android Showcase
 
 **By Rhett Langseth**
 
@@ -30,6 +30,7 @@ Here are a few screenshots from the public showcase application:
 ![Showcase start page](media/readme/showcase-start.png)
 ![Analyze page with default settings](media/readme/showcase-analyze-default.png)
 ![Analyze page with Philidor Defense and Leaf board](media/readme/showcase-analyze-philidor-leaf.png)
+
 ![Showcase settings page](media/readme/showcase-settings.png)
 ![Settings page with color picker open](media/readme/showcase-settings-color-picker.png)
 ![Showcase about page](media/readme/showcase-about.png)
