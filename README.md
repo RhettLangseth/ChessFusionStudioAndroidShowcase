@@ -8,6 +8,8 @@ This is a curated public showcase derived from my private `ChessFusionStudio` pr
 
 The full Android application is a modern mobile workspace for competitive chess players to analyze and archive their games, with aesthetic board and piece customization for a polished, personalized study experience.
 
+**Full Android app:** [View the Google Play listing](https://play.google.com/store/apps/details?id=com.chessfusion.app)
+
 ## Agentic AI Collaboration
 
 Both this showcase repo and the private `ChessFusionStudio` repo it was derived from were built through iterative collaboration with OpenAI Codex / agentic AI.
